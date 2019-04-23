@@ -1,0 +1,30 @@
+{
+  "name": "discord-dialogflow-bot",
+  "version": "1.0.1",
+  "description": "Starter kit for a Dialogflow-powered Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "eris": "^0.8.5",
+    "apiai": "^4.0.3",
+    "request": "^2.85.0",
+    "babel-register": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "node-cache": "^4.2.0"
+  },
+  "engines": {
+    "node": "9"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/welcome-project"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}

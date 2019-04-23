@@ -1,22 +1,3 @@
-Starter kit for a Dialogflow-powered Discord bot
-================================================
-
-## Get started
-
-1. Create a Discord app
-2. Add a bot user to your app
-3. Create a Dialogflow agent
-4. Add some intents to the agent
-5. Configure this app's `.env` file with the bot's name and API keys for Discord and DialogFlow
-
-### Example `.env` file
-
-    BOT_KEYWORD='superbot'
-    DISCORD_API_TOKEN='NDIzOTM5$0meR4nd0m$hi7N...'
-    DIALOGFLOW_CLIENT_ACCESS_KEY='54019...'
-    
-## License
-
 MIT License
 
 Copyright (c) 2018 Eduardo M
