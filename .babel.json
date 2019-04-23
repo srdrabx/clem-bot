@@ -1,0 +1,1388 @@
+{
+  "{\"filename\":\"/app/bot.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot.js",
+      "filenameRelative": "/app/bot.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "bot.js",
+      "sourceFileName": "bot.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "bot"
+    },
+    "ignored": false,
+    "code": "const Eris = require('eris');\nconst express = require('express');\nconst request = require('request');\n\nconst brainsCallback = require('./brains');\nconst { getStaticResponse } = require('./staticResponses');\n\nconst {\n  PORT,\n  BOT_KEYWORD,\n  DISCORD_API_TOKEN,\n  DIALOG_FLOW_CLIENT_ACCESS_KEY,\n  PROJECT_DOMAIN\n} = process.env;\n\nconst bot = new Eris(DISCORD_API_TOKEN);\nconst webServer = express();\n\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD);\n\nconst keepalive = () => PROJECT_DOMAIN && request({ url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` }, () => setTimeout(keepalive, 55000));\n\nbot.on(\"ready\", () => console.log(`[Eris Adapter] - Logged in as ${bot.user.username}#${bot.user.discriminator}`));\n\nbot.on(\"messageCreate\", msg => msg.content === \"!ping\" ? bot.createMessage(msg.channel.id, getStaticResponse('ping').content) : botKeywordRegexp.test(String(msg.content).toLowerCase()) ? brainsCallback(bot)(msg) : void 0);\n\nbot.connect();\n\nwebServer.use('/', express.static('public'));\nwebServer.use('/remix-button', (_, res) => res.send(`\n<a href=\"https://glitch.com/edit/#!/remix/discord-dialogflow-bot\">\n  <img src=\"https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg\" alt=\"Remix on Glitch\" />\n</a>\n`));\n\nwebServer.get('/glitch-alive`', (req, res) => res.send(`I'm alive`));\nwebServer.listen(PORT, () => console.log(`[Webserver] - Listening on port ${PORT}!`) && keepalive());\n\nmodule.exports = { bot, webServer };\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJvdC5qcyJdLCJuYW1lcyI6WyJFcmlzIiwicmVxdWlyZSIsImV4cHJlc3MiLCJyZXF1ZXN0IiwiYnJhaW5zQ2FsbGJhY2siLCJnZXRTdGF0aWNSZXNwb25zZSIsIlBPUlQiLCJCT1RfS0VZV09SRCIsIkRJU0NPUkRfQVBJX1RPS0VOIiwiRElBTE9HX0ZMT1dfQ0xJRU5UX0FDQ0VTU19LRVkiLCJQUk9KRUNUX0RPTUFJTiIsInByb2Nlc3MiLCJlbnYiLCJib3QiLCJ3ZWJTZXJ2ZXIiLCJib3RLZXl3b3JkUmVnZXhwIiwiUmVnRXhwIiwia2VlcGFsaXZlIiwidXJsIiwic2V0VGltZW91dCIsIm9uIiwiY29uc29sZSIsImxvZyIsInVzZXIiLCJ1c2VybmFtZSIsImRpc2NyaW1pbmF0b3IiLCJtc2ciLCJjb250ZW50IiwiY3JlYXRlTWVzc2FnZSIsImNoYW5uZWwiLCJpZCIsInRlc3QiLCJTdHJpbmciLCJ0b0xvd2VyQ2FzZSIsImNvbm5lY3QiLCJ1c2UiLCJzdGF0aWMiLCJfIiwicmVzIiwic2VuZCIsImdldCIsInJlcSIsImxpc3RlbiIsIm1vZHVsZSIsImV4cG9ydHMiXSwibWFwcGluZ3MiOiJBQUFBLE1BQU1BLE9BQU9DLFFBQVEsTUFBUixDQUFiO0FBQ0EsTUFBTUMsVUFBVUQsUUFBUSxTQUFSLENBQWhCO0FBQ0EsTUFBTUUsVUFBVUYsUUFBUSxTQUFSLENBQWhCOztBQUVBLE1BQU1HLGlCQUFpQkgsUUFBUSxVQUFSLENBQXZCO0FBQ0EsTUFBTSxFQUFFSSxpQkFBRixLQUF3QkosUUFBUSxtQkFBUixDQUE5Qjs7QUFFQSxNQUFNO0FBQ0pLLE1BREk7QUFFSkMsYUFGSTtBQUdKQyxtQkFISTtBQUlKQywrQkFKSTtBQUtKQztBQUxJLElBTUZDLFFBQVFDLEdBTlo7O0FBUUEsTUFBTUMsTUFBTSxJQUFJYixJQUFKLENBQVNRLGlCQUFULENBQVo7QUFDQSxNQUFNTSxZQUFZWixTQUFsQjs7QUFFQSxNQUFNYSxtQkFBbUIsSUFBSUMsTUFBSixDQUFXVCxXQUFYLENBQXpCOztBQUVBLE1BQU1VLFlBQVksTUFDaEJQLGtCQUNBUCxRQUFRLEVBQUVlLEtBQU0sV0FBVVIsY0FBZSx5QkFBakMsRUFBUixFQUFxRSxNQUFNUyxXQUFXRixTQUFYLEVBQXNCLEtBQXRCLENBQTNFLENBRkY7O0FBSUFKLElBQUlPLEVBQUosQ0FBTyxPQUFQLEVBQWdCLE1BQ2RDLFFBQVFDLEdBQVIsQ0FBYSxpQ0FBZ0NULElBQUlVLElBQUosQ0FBU0MsUUFBUyxJQUFHWCxJQUFJVSxJQUFKLENBQVNFLGFBQWMsRUFBekYsQ0FERjs7QUFJQVosSUFBSU8sRUFBSixDQUFPLGVBQVAsRUFBd0JNLE9BQ3RCQSxJQUFJQyxPQUFKLEtBQWdCLE9BQWhCLEdBQ0lkLElBQUllLGFBQUosQ0FBa0JGLElBQUlHLE9BQUosQ0FBWUMsRUFBOUIsRUFBa0N6QixrQkFBa0IsTUFBbEIsRUFBMEJzQixPQUE1RCxDQURKLEdBRUlaLGlCQUFpQmdCLElBQWpCLENBQXNCQyxPQUFPTixJQUFJQyxPQUFYLEVBQW9CTSxXQUFwQixFQUF0QixJQUNFN0IsZUFBZVMsR0FBZixFQUFvQmEsR0FBcEIsQ0FERixHQUVFLEtBQUssQ0FMYjs7QUFRQWIsSUFBSXFCLE9BQUo7O0FBRUFwQixVQUFVcUIsR0FBVixDQUFjLEdBQWQsRUFBbUJqQyxRQUFRa0MsTUFBUixDQUFlLFFBQWYsQ0FBbkI7QUFDQXRCLFVBQVVxQixHQUFWLENBQWMsZUFBZCxFQUErQixDQUFDRSxDQUFELEVBQUlDLEdBQUosS0FBWUEsSUFBSUMsSUFBSixDQUFVOzs7O0NBQVYsQ0FBM0M7O0FBTUF6QixVQUFVMEIsR0FBVixDQUFjLGdCQUFkLEVBQWdDLENBQUNDLEdBQUQsRUFBTUgsR0FBTixLQUFjQSxJQUFJQyxJQUFKLENBQVUsV0FBVixDQUE5QztBQUNBekIsVUFBVTRCLE1BQVYsQ0FBaUJwQyxJQUFqQixFQUF1QixNQUFNZSxRQUFRQyxHQUFSLENBQWEsbUNBQWtDaEIsSUFBSyxHQUFwRCxLQUEyRFcsV0FBeEY7O0FBRUEwQixPQUFPQyxPQUFQLEdBQWlCLEVBQUUvQixHQUFGLEVBQU9DLFNBQVAsRUFBakIiLCJmaWxlIjoiYm90LmpzIiwic291cmNlUm9vdCI6Ii9hcHAiLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCBFcmlzID0gcmVxdWlyZSgnZXJpcycpXG5jb25zdCBleHByZXNzID0gcmVxdWlyZSgnZXhwcmVzcycpXG5jb25zdCByZXF1ZXN0ID0gcmVxdWlyZSgncmVxdWVzdCcpXG5cbmNvbnN0IGJyYWluc0NhbGxiYWNrID0gcmVxdWlyZSgnLi9icmFpbnMnKVxuY29uc3QgeyBnZXRTdGF0aWNSZXNwb25zZSB9ID0gcmVxdWlyZSgnLi9zdGF0aWNSZXNwb25zZXMnKVxuXG5jb25zdCB7IFxuICBQT1JULFxuICBCT1RfS0VZV09SRCxcbiAgRElTQ09SRF9BUElfVE9LRU4sXG4gIERJQUxPR19GTE9XX0NMSUVOVF9BQ0NFU1NfS0VZLFxuICBQUk9KRUNUX0RPTUFJTlxufSA9IHByb2Nlc3MuZW52XG5cbmNvbnN0IGJvdCA9IG5ldyBFcmlzKERJU0NPUkRfQVBJX1RPS0VOKVxuY29uc3Qgd2ViU2VydmVyID0gZXhwcmVzcygpXG5cbmNvbnN0IGJvdEtleXdvcmRSZWdleHAgPSBuZXcgUmVnRXhwKEJPVF9LRVlXT1JEKVxuXG5jb25zdCBrZWVwYWxpdmUgPSAoKSA9PlxuICBQUk9KRUNUX0RPTUFJTiAmJlxuICByZXF1ZXN0KHsgdXJsOiBgaHR0cHM6Ly8ke1BST0pFQ1RfRE9NQUlOfS5nbGl0Y2gubWUvZ2xpdGNoLWFsaXZlYCB9LCAoKSA9PiBzZXRUaW1lb3V0KGtlZXBhbGl2ZSwgNTUwMDApKVxuXG5ib3Qub24oXCJyZWFkeVwiLCAoKSA9PiBcbiAgY29uc29sZS5sb2coYFtFcmlzIEFkYXB0ZXJdIC0gTG9nZ2VkIGluIGFzICR7Ym90LnVzZXIudXNlcm5hbWV9IyR7Ym90LnVzZXIuZGlzY3JpbWluYXRvcn1gKVxuKVxuXG5ib3Qub24oXCJtZXNzYWdlQ3JlYXRlXCIsIG1zZyA9PiBcbiAgbXNnLmNvbnRlbnQgPT09IFwiIXBpbmdcIlxuICAgID8gYm90LmNyZWF0ZU1lc3NhZ2UobXNnLmNoYW5uZWwuaWQsIGdldFN0YXRpY1Jlc3BvbnNlKCdwaW5nJykuY29udGVudClcbiAgICA6IGJvdEtleXdvcmRSZWdleHAudGVzdChTdHJpbmcobXNnLmNvbnRlbnQpLnRvTG93ZXJDYXNlKCkpXG4gICAgICA/IGJyYWluc0NhbGxiYWNrKGJvdCkobXNnKVxuICAgICAgOiB2b2lkIDBcbilcblxuYm90LmNvbm5lY3QoKVxuXG53ZWJTZXJ2ZXIudXNlKCcvJywgZXhwcmVzcy5zdGF0aWMoJ3B1YmxpYycpKVxud2ViU2VydmVyLnVzZSgnL3JlbWl4LWJ1dHRvbicsIChfLCByZXMpID0+IHJlcy5zZW5kKGBcbjxhIGhyZWY9XCJodHRwczovL2dsaXRjaC5jb20vZWRpdC8jIS9yZW1peC9kaXNjb3JkLWRpYWxvZ2Zsb3ctYm90XCI+XG4gIDxpbWcgc3JjPVwiaHR0cHM6Ly9jZG4uZ2xpdGNoLmNvbS8yNzAzYmFmMi1iNjQzLTRkYTctYWI5MS03ZWUyYTJkMDBiNWIlMkZyZW1peC1idXR0b24uc3ZnXCIgYWx0PVwiUmVtaXggb24gR2xpdGNoXCIgLz5cbjwvYT5cbmApKVxuXG53ZWJTZXJ2ZXIuZ2V0KCcvZ2xpdGNoLWFsaXZlYCcsIChyZXEsIHJlcykgPT4gcmVzLnNlbmQoYEknbSBhbGl2ZWApKVxud2ViU2VydmVyLmxpc3RlbihQT1JULCAoKSA9PiBjb25zb2xlLmxvZyhgW1dlYnNlcnZlcl0gLSBMaXN0ZW5pbmcgb24gcG9ydCAke1BPUlR9IWApICYmIGtlZXBhbGl2ZSgpKVxuXG5tb2R1bGUuZXhwb3J0cyA9IHsgYm90LCB3ZWJTZXJ2ZXIgfSJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "bot.js"
+      ],
+      "names": [
+        "Eris",
+        "require",
+        "express",
+        "request",
+        "brainsCallback",
+        "getStaticResponse",
+        "PORT",
+        "BOT_KEYWORD",
+        "DISCORD_API_TOKEN",
+        "DIALOG_FLOW_CLIENT_ACCESS_KEY",
+        "PROJECT_DOMAIN",
+        "process",
+        "env",
+        "bot",
+        "webServer",
+        "botKeywordRegexp",
+        "RegExp",
+        "keepalive",
+        "url",
+        "setTimeout",
+        "on",
+        "console",
+        "log",
+        "user",
+        "username",
+        "discriminator",
+        "msg",
+        "content",
+        "createMessage",
+        "channel",
+        "id",
+        "test",
+        "String",
+        "toLowerCase",
+        "connect",
+        "use",
+        "static",
+        "_",
+        "res",
+        "send",
+        "get",
+        "req",
+        "listen",
+        "module",
+        "exports"
+      ],
+      "mappings": "AAAA,MAAMA,OAAOC,QAAQ,MAAR,CAAb;AACA,MAAMC,UAAUD,QAAQ,SAAR,CAAhB;AACA,MAAME,UAAUF,QAAQ,SAAR,CAAhB;;AAEA,MAAMG,iBAAiBH,QAAQ,UAAR,CAAvB;AACA,MAAM,EAAEI,iBAAF,KAAwBJ,QAAQ,mBAAR,CAA9B;;AAEA,MAAM;AACJK,MADI;AAEJC,aAFI;AAGJC,mBAHI;AAIJC,+BAJI;AAKJC;AALI,IAMFC,QAAQC,GANZ;;AAQA,MAAMC,MAAM,IAAIb,IAAJ,CAASQ,iBAAT,CAAZ;AACA,MAAMM,YAAYZ,SAAlB;;AAEA,MAAMa,mBAAmB,IAAIC,MAAJ,CAAWT,WAAX,CAAzB;;AAEA,MAAMU,YAAY,MAChBP,kBACAP,QAAQ,EAAEe,KAAM,WAAUR,cAAe,yBAAjC,EAAR,EAAqE,MAAMS,WAAWF,SAAX,EAAsB,KAAtB,CAA3E,CAFF;;AAIAJ,IAAIO,EAAJ,CAAO,OAAP,EAAgB,MACdC,QAAQC,GAAR,CAAa,iCAAgCT,IAAIU,IAAJ,CAASC,QAAS,IAAGX,IAAIU,IAAJ,CAASE,aAAc,EAAzF,CADF;;AAIAZ,IAAIO,EAAJ,CAAO,eAAP,EAAwBM,OACtBA,IAAIC,OAAJ,KAAgB,OAAhB,GACId,IAAIe,aAAJ,CAAkBF,IAAIG,OAAJ,CAAYC,EAA9B,EAAkCzB,kBAAkB,MAAlB,EAA0BsB,OAA5D,CADJ,GAEIZ,iBAAiBgB,IAAjB,CAAsBC,OAAON,IAAIC,OAAX,EAAoBM,WAApB,EAAtB,IACE7B,eAAeS,GAAf,EAAoBa,GAApB,CADF,GAEE,KAAK,CALb;;AAQAb,IAAIqB,OAAJ;;AAEApB,UAAUqB,GAAV,CAAc,GAAd,EAAmBjC,QAAQkC,MAAR,CAAe,QAAf,CAAnB;AACAtB,UAAUqB,GAAV,CAAc,eAAd,EAA+B,CAACE,CAAD,EAAIC,GAAJ,KAAYA,IAAIC,IAAJ,CAAU;;;;CAAV,CAA3C;;AAMAzB,UAAU0B,GAAV,CAAc,gBAAd,EAAgC,CAACC,GAAD,EAAMH,GAAN,KAAcA,IAAIC,IAAJ,CAAU,WAAV,CAA9C;AACAzB,UAAU4B,MAAV,CAAiBpC,IAAjB,EAAuB,MAAMe,QAAQC,GAAR,CAAa,mCAAkChB,IAAK,GAApD,KAA2DW,WAAxF;;AAEA0B,OAAOC,OAAP,GAAiB,EAAE/B,GAAF,EAAOC,SAAP,EAAjB",
+      "file": "bot.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "const Eris = require('eris')\nconst express = require('express')\nconst request = require('request')\n\nconst brainsCallback = require('./brains')\nconst { getStaticResponse } = require('./staticResponses')\n\nconst { \n  PORT,\n  BOT_KEYWORD,\n  DISCORD_API_TOKEN,\n  DIALOG_FLOW_CLIENT_ACCESS_KEY,\n  PROJECT_DOMAIN\n} = process.env\n\nconst bot = new Eris(DISCORD_API_TOKEN)\nconst webServer = express()\n\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD)\n\nconst keepalive = () =>\n  PROJECT_DOMAIN &&\n  request({ url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` }, () => setTimeout(keepalive, 55000))\n\nbot.on(\"ready\", () => \n  console.log(`[Eris Adapter] - Logged in as ${bot.user.username}#${bot.user.discriminator}`)\n)\n\nbot.on(\"messageCreate\", msg => \n  msg.content === \"!ping\"\n    ? bot.createMessage(msg.channel.id, getStaticResponse('ping').content)\n    : botKeywordRegexp.test(String(msg.content).toLowerCase())\n      ? brainsCallback(bot)(msg)\n      : void 0\n)\n\nbot.connect()\n\nwebServer.use('/', express.static('public'))\nwebServer.use('/remix-button', (_, res) => res.send(`\n<a href=\"https://glitch.com/edit/#!/remix/discord-dialogflow-bot\">\n  <img src=\"https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg\" alt=\"Remix on Glitch\" />\n</a>\n`))\n\nwebServer.get('/glitch-alive`', (req, res) => res.send(`I'm alive`))\nwebServer.listen(PORT, () => console.log(`[Webserver] - Listening on port ${PORT}!`) && keepalive())\n\nmodule.exports = { bot, webServer }"
+      ]
+    },
+    "mtime": 1522121639784
+  },
+  "{\"filename\":\"/app/brains.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/brains.js",
+      "filenameRelative": "/app/brains.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "brains.js",
+      "sourceFileName": "brains.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "brains"
+    },
+    "ignored": false,
+    "code": "const apiai = require('apiai');\nconst { getStaticResponse } = require('./staticResponses');\n\nconst { DIALOG_FLOW_CLIENT_ACCESS_KEY } = process.env;\n\nconst nlp = DIALOG_FLOW_CLIENT_ACCESS_KEY !== '' ? apiai(DIALOG_FLOW_CLIENT_ACCESS_KEY) : false;\n\nconst brainsCallback = nlp ? bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id\n  });\n  request.on('response', response => {\n    console.log(response);\n  });\n  request.on('error', e => bot.createMessage(msg.channel.id, getStaticResponse('nlp-error').content) && console.error(e));\n  request.end();\n} : _ => __ => console.log('[NLP] - NLP disabled because a DialogFlow key was not provided');\n\nmodule.exports = brainsCallback;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJyYWlucy5qcyJdLCJuYW1lcyI6WyJhcGlhaSIsInJlcXVpcmUiLCJnZXRTdGF0aWNSZXNwb25zZSIsIkRJQUxPR19GTE9XX0NMSUVOVF9BQ0NFU1NfS0VZIiwicHJvY2VzcyIsImVudiIsIm5scCIsImJyYWluc0NhbGxiYWNrIiwiYm90IiwibXNnIiwicmVxdWVzdCIsInRleHRSZXF1ZXN0IiwiY29udGVudCIsInNlc3Npb25JZCIsImF1dGhvciIsImlkIiwib24iLCJyZXNwb25zZSIsImNvbnNvbGUiLCJsb2ciLCJlIiwiY3JlYXRlTWVzc2FnZSIsImNoYW5uZWwiLCJlcnJvciIsImVuZCIsIl8iLCJfXyIsIm1vZHVsZSIsImV4cG9ydHMiXSwibWFwcGluZ3MiOiJBQUFBLE1BQU1BLFFBQVFDLFFBQVEsT0FBUixDQUFkO0FBQ0EsTUFBTSxFQUFFQyxpQkFBRixLQUF3QkQsUUFBUSxtQkFBUixDQUE5Qjs7QUFFQSxNQUFNLEVBQUVFLDZCQUFGLEtBQW9DQyxRQUFRQyxHQUFsRDs7QUFFQSxNQUFNQyxNQUFNSCxrQ0FBa0MsRUFBbEMsR0FDUkgsTUFBTUcsNkJBQU4sQ0FEUSxHQUVSLEtBRko7O0FBSUEsTUFBTUksaUJBQWlCRCxNQUNuQkUsT0FBT0MsT0FBTztBQUNaLFFBQU1DLFVBQVVKLElBQUlLLFdBQUosQ0FBZ0JGLElBQUlHLE9BQXBCLEVBQTZCO0FBQzNDQyxlQUFXSixJQUFJSyxNQUFKLENBQVdDO0FBRHFCLEdBQTdCLENBQWhCO0FBR0FMLFVBQVFNLEVBQVIsQ0FBVyxVQUFYLEVBQXVCQyxZQUFZO0FBQ2pDQyxZQUFRQyxHQUFSLENBQVlGLFFBQVo7QUFDRCxHQUZEO0FBR0FQLFVBQVFNLEVBQVIsQ0FBVyxPQUFYLEVBQW9CSSxLQUNsQlosSUFBSWEsYUFBSixDQUNFWixJQUFJYSxPQUFKLENBQVlQLEVBRGQsRUFFRWIsa0JBQWtCLFdBQWxCLEVBQStCVSxPQUZqQyxLQUlHTSxRQUFRSyxLQUFSLENBQWNILENBQWQsQ0FMTDtBQU9BVixVQUFRYyxHQUFSO0FBQ0QsQ0FoQmtCLEdBaUJuQkMsS0FBS0MsTUFBTVIsUUFBUUMsR0FBUixDQUFZLGdFQUFaLENBakJmOztBQW1CQVEsT0FBT0MsT0FBUCxHQUFpQnJCLGNBQWpCIiwiZmlsZSI6ImJyYWlucy5qcyIsInNvdXJjZVJvb3QiOiIvYXBwIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgYXBpYWkgPSByZXF1aXJlKCdhcGlhaScpXG5jb25zdCB7IGdldFN0YXRpY1Jlc3BvbnNlIH0gPSByZXF1aXJlKCcuL3N0YXRpY1Jlc3BvbnNlcycpXG5cbmNvbnN0IHsgRElBTE9HX0ZMT1dfQ0xJRU5UX0FDQ0VTU19LRVkgfSA9IHByb2Nlc3MuZW52XG5cbmNvbnN0IG5scCA9IERJQUxPR19GTE9XX0NMSUVOVF9BQ0NFU1NfS0VZICE9PSAnJyBcbiAgPyBhcGlhaShESUFMT0dfRkxPV19DTElFTlRfQUNDRVNTX0tFWSkgXG4gIDogZmFsc2VcblxuY29uc3QgYnJhaW5zQ2FsbGJhY2sgPSBubHAgXG4gID8gYm90ID0+IG1zZyA9PiB7XG4gICAgICBjb25zdCByZXF1ZXN0ID0gbmxwLnRleHRSZXF1ZXN0KG1zZy5jb250ZW50LCB7XG4gICAgICAgIHNlc3Npb25JZDogbXNnLmF1dGhvci5pZFxuICAgICAgfSlcbiAgICAgIHJlcXVlc3Qub24oJ3Jlc3BvbnNlJywgcmVzcG9uc2UgPT4ge1xuICAgICAgICBjb25zb2xlLmxvZyhyZXNwb25zZSk7XG4gICAgICB9KVxuICAgICAgcmVxdWVzdC5vbignZXJyb3InLCBlID0+IFxuICAgICAgICBib3QuY3JlYXRlTWVzc2FnZShcbiAgICAgICAgICBtc2cuY2hhbm5lbC5pZCxcbiAgICAgICAgICBnZXRTdGF0aWNSZXNwb25zZSgnbmxwLWVycm9yJykuY29udGVudFxuICAgICAgICApXG4gICAgICAgICYmIGNvbnNvbGUuZXJyb3IoZSlcbiAgICAgIClcbiAgICAgIHJlcXVlc3QuZW5kKClcbiAgICB9XG4gIDogXyA9PiBfXyA9PiBjb25zb2xlLmxvZygnW05MUF0gLSBOTFAgZGlzYWJsZWQgYmVjYXVzZSBhIERpYWxvZ0Zsb3cga2V5IHdhcyBub3QgcHJvdmlkZWQnKVxuXG5tb2R1bGUuZXhwb3J0cyA9IGJyYWluc0NhbGxiYWNrOyJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "brains.js"
+      ],
+      "names": [
+        "apiai",
+        "require",
+        "getStaticResponse",
+        "DIALOG_FLOW_CLIENT_ACCESS_KEY",
+        "process",
+        "env",
+        "nlp",
+        "brainsCallback",
+        "bot",
+        "msg",
+        "request",
+        "textRequest",
+        "content",
+        "sessionId",
+        "author",
+        "id",
+        "on",
+        "response",
+        "console",
+        "log",
+        "e",
+        "createMessage",
+        "channel",
+        "error",
+        "end",
+        "_",
+        "__",
+        "module",
+        "exports"
+      ],
+      "mappings": "AAAA,MAAMA,QAAQC,QAAQ,OAAR,CAAd;AACA,MAAM,EAAEC,iBAAF,KAAwBD,QAAQ,mBAAR,CAA9B;;AAEA,MAAM,EAAEE,6BAAF,KAAoCC,QAAQC,GAAlD;;AAEA,MAAMC,MAAMH,kCAAkC,EAAlC,GACRH,MAAMG,6BAAN,CADQ,GAER,KAFJ;;AAIA,MAAMI,iBAAiBD,MACnBE,OAAOC,OAAO;AACZ,QAAMC,UAAUJ,IAAIK,WAAJ,CAAgBF,IAAIG,OAApB,EAA6B;AAC3CC,eAAWJ,IAAIK,MAAJ,CAAWC;AADqB,GAA7B,CAAhB;AAGAL,UAAQM,EAAR,CAAW,UAAX,EAAuBC,YAAY;AACjCC,YAAQC,GAAR,CAAYF,QAAZ;AACD,GAFD;AAGAP,UAAQM,EAAR,CAAW,OAAX,EAAoBI,KAClBZ,IAAIa,aAAJ,CACEZ,IAAIa,OAAJ,CAAYP,EADd,EAEEb,kBAAkB,WAAlB,EAA+BU,OAFjC,KAIGM,QAAQK,KAAR,CAAcH,CAAd,CALL;AAOAV,UAAQc,GAAR;AACD,CAhBkB,GAiBnBC,KAAKC,MAAMR,QAAQC,GAAR,CAAY,gEAAZ,CAjBf;;AAmBAQ,OAAOC,OAAP,GAAiBrB,cAAjB",
+      "file": "brains.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "const apiai = require('apiai')\nconst { getStaticResponse } = require('./staticResponses')\n\nconst { DIALOG_FLOW_CLIENT_ACCESS_KEY } = process.env\n\nconst nlp = DIALOG_FLOW_CLIENT_ACCESS_KEY !== '' \n  ? apiai(DIALOG_FLOW_CLIENT_ACCESS_KEY) \n  : false\n\nconst brainsCallback = nlp \n  ? bot => msg => {\n      const request = nlp.textRequest(msg.content, {\n        sessionId: msg.author.id\n      })\n      request.on('response', response => {\n        console.log(response);\n      })\n      request.on('error', e => \n        bot.createMessage(\n          msg.channel.id,\n          getStaticResponse('nlp-error').content\n        )\n        && console.error(e)\n      )\n      request.end()\n    }\n  : _ => __ => console.log('[NLP] - NLP disabled because a DialogFlow key was not provided')\n\nmodule.exports = brainsCallback;"
+      ]
+    },
+    "mtime": 1522119990021
+  },
+  "{\"filename\":\"/app/staticResponses.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/staticResponses.js",
+      "filenameRelative": "/app/staticResponses.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "staticResponses.js",
+      "sourceFileName": "staticResponses.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "staticResponses"
+    },
+    "ignored": false,
+    "code": "const responses = {\n\n  ping: { type: 'text', content: 'pong!' },\n\n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  }\n\n};\n\nconst getResponses = () => responses;\n\nmodule.exports.getStaticResponse = response => getResponses()[response];\n\nmodule.exports.default = getResponses;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0YXRpY1Jlc3BvbnNlcy5qcyJdLCJuYW1lcyI6WyJyZXNwb25zZXMiLCJwaW5nIiwidHlwZSIsImNvbnRlbnQiLCJnZXRSZXNwb25zZXMiLCJtb2R1bGUiLCJleHBvcnRzIiwiZ2V0U3RhdGljUmVzcG9uc2UiLCJyZXNwb25zZSIsImRlZmF1bHQiXSwibWFwcGluZ3MiOiJBQUFBLE1BQU1BLFlBQVk7O0FBRWhCQyxRQUFNLEVBQUVDLE1BQU0sTUFBUixFQUFnQkMsU0FBUyxPQUF6QixFQUZVOztBQUloQixlQUFhO0FBQ1hELFVBQU0sTUFESztBQUVYQyxhQUFTO0FBRkU7O0FBSkcsQ0FBbEI7O0FBV0EsTUFBTUMsZUFBZSxNQUFNSixTQUEzQjs7QUFFQUssT0FBT0MsT0FBUCxDQUFlQyxpQkFBZixHQUFtQ0MsWUFBWUosZUFBZUksUUFBZixDQUEvQzs7QUFFQUgsT0FBT0MsT0FBUCxDQUFlRyxPQUFmLEdBQXlCTCxZQUF6QiIsImZpbGUiOiJzdGF0aWNSZXNwb25zZXMuanMiLCJzb3VyY2VSb290IjoiL2FwcCIsInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHJlc3BvbnNlcyA9IHtcbiAgXG4gIHBpbmc6IHsgdHlwZTogJ3RleHQnLCBjb250ZW50OiAncG9uZyEnIH0sXG4gIFxuICAnbmxwLWVycm9yJzoge1xuICAgIHR5cGU6ICd0ZXh0JyxcbiAgICBjb250ZW50OiAnT29wcywgYWxnbyAgbm8gZXN0YSBiaWVuIGNvbiBtaSBzaXN0ZW1hIHkgbm8gcHVlZG8gY29udGFjdGFyIGNvbiBtaSBjZXJlYnJvLCBoYWJsZW1vcyBtYXMgdGFyZGUgcG9yIGZhdm9yIDpTJ1xuICB9LFxuICBcbn1cblxuY29uc3QgZ2V0UmVzcG9uc2VzID0gKCkgPT4gcmVzcG9uc2VzXG5cbm1vZHVsZS5leHBvcnRzLmdldFN0YXRpY1Jlc3BvbnNlID0gcmVzcG9uc2UgPT4gZ2V0UmVzcG9uc2VzKClbcmVzcG9uc2VdXG5cbm1vZHVsZS5leHBvcnRzLmRlZmF1bHQgPSBnZXRSZXNwb25zZXMiXX0=",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "staticResponses.js"
+      ],
+      "names": [
+        "responses",
+        "ping",
+        "type",
+        "content",
+        "getResponses",
+        "module",
+        "exports",
+        "getStaticResponse",
+        "response",
+        "default"
+      ],
+      "mappings": "AAAA,MAAMA,YAAY;;AAEhBC,QAAM,EAAEC,MAAM,MAAR,EAAgBC,SAAS,OAAzB,EAFU;;AAIhB,eAAa;AACXD,UAAM,MADK;AAEXC,aAAS;AAFE;;AAJG,CAAlB;;AAWA,MAAMC,eAAe,MAAMJ,SAA3B;;AAEAK,OAAOC,OAAP,CAAeC,iBAAf,GAAmCC,YAAYJ,eAAeI,QAAf,CAA/C;;AAEAH,OAAOC,OAAP,CAAeG,OAAf,GAAyBL,YAAzB",
+      "file": "staticResponses.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "const responses = {\n  \n  ping: { type: 'text', content: 'pong!' },\n  \n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  },\n  \n}\n\nconst getResponses = () => responses\n\nmodule.exports.getStaticResponse = response => getResponses()[response]\n\nmodule.exports.default = getResponses"
+      ]
+    },
+    "mtime": 1522120691065
+  },
+  "{\"filename\":\"/app/bot.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "eris",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "Eris"
+              }
+            ]
+          },
+          {
+            "source": "express",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "express"
+              }
+            ]
+          },
+          {
+            "source": "request",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "request"
+              }
+            ]
+          },
+          {
+            "source": "./brains",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "brainsCallback"
+              }
+            ]
+          },
+          {
+            "source": "./staticResponses",
+            "imported": [
+              "getStaticResponse"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "getStaticResponse",
+                "local": "getStaticResponse"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot.js",
+      "filenameRelative": "/app/bot.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "bot.js",
+      "sourceFileName": "bot.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "bot"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nvar _eris = require('eris');\n\nvar _eris2 = _interopRequireDefault(_eris);\n\nvar _express = require('express');\n\nvar _express2 = _interopRequireDefault(_express);\n\nvar _request = require('request');\n\nvar _request2 = _interopRequireDefault(_request);\n\nvar _brains = require('./brains');\n\nvar _brains2 = _interopRequireDefault(_brains);\n\nvar _staticResponses = require('./staticResponses');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst {\n  PORT,\n  BOT_KEYWORD,\n  DISCORD_API_TOKEN,\n  DIALOG_FLOW_CLIENT_ACCESS_KEY,\n  PROJECT_DOMAIN\n} = process.env;\n\nconst bot = new _eris2.default(DISCORD_API_TOKEN);\nconst webServer = (0, _express2.default)();\n\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD);\n\nconst keepalive = () => PROJECT_DOMAIN && (0, _request2.default)({ url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` }, () => setTimeout(keepalive, 55000));\n\nbot.on(\"ready\", () => console.log(`[Eris Adapter] - Logged in as ${bot.user.username}#${bot.user.discriminator}`));\n\nbot.on(\"messageCreate\", msg => msg.content === \"!ping\" ? bot.createMessage(msg.channel.id, (0, _staticResponses.getStaticResponse)('ping').content) : botKeywordRegexp.test(String(msg.content).toLowerCase()) ? (0, _brains2.default)(bot)(msg) : void 0);\n\nbot.connect();\n\nwebServer.use('/', _express2.default.static('public'));\nwebServer.use('/remix-button', (_, res) => res.send(`\n<a href=\"https://glitch.com/edit/#!/remix/discord-dialogflow-bot\">\n  <img src=\"https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg\" alt=\"Remix on Glitch\" />\n</a>\n`));\n\nwebServer.get('/glitch-alive`', (req, res) => res.send(`I'm alive`));\nwebServer.listen(PORT, () => console.log(`[Webserver] - Listening on port ${PORT}!`) && keepalive());\n\nmodule.exports = { bot, webServer };\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJvdC5qcyJdLCJuYW1lcyI6WyJQT1JUIiwiQk9UX0tFWVdPUkQiLCJESVNDT1JEX0FQSV9UT0tFTiIsIkRJQUxPR19GTE9XX0NMSUVOVF9BQ0NFU1NfS0VZIiwiUFJPSkVDVF9ET01BSU4iLCJwcm9jZXNzIiwiZW52IiwiYm90Iiwid2ViU2VydmVyIiwiYm90S2V5d29yZFJlZ2V4cCIsIlJlZ0V4cCIsImtlZXBhbGl2ZSIsInVybCIsInNldFRpbWVvdXQiLCJvbiIsImNvbnNvbGUiLCJsb2ciLCJ1c2VyIiwidXNlcm5hbWUiLCJkaXNjcmltaW5hdG9yIiwibXNnIiwiY29udGVudCIsImNyZWF0ZU1lc3NhZ2UiLCJjaGFubmVsIiwiaWQiLCJ0ZXN0IiwiU3RyaW5nIiwidG9Mb3dlckNhc2UiLCJjb25uZWN0IiwidXNlIiwic3RhdGljIiwiXyIsInJlcyIsInNlbmQiLCJnZXQiLCJyZXEiLCJsaXN0ZW4iLCJtb2R1bGUiLCJleHBvcnRzIl0sIm1hcHBpbmdzIjoiOztBQUFBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUVBOzs7O0FBQ0E7Ozs7QUFFQSxNQUFNO0FBQ0pBLE1BREk7QUFFSkMsYUFGSTtBQUdKQyxtQkFISTtBQUlKQywrQkFKSTtBQUtKQztBQUxJLElBTUZDLFFBQVFDLEdBTlo7O0FBUUEsTUFBTUMsTUFBTSxtQkFBU0wsaUJBQVQsQ0FBWjtBQUNBLE1BQU1NLFlBQVksd0JBQWxCOztBQUVBLE1BQU1DLG1CQUFtQixJQUFJQyxNQUFKLENBQVdULFdBQVgsQ0FBekI7O0FBRUEsTUFBTVUsWUFBWSxNQUNoQlAsa0JBQ0EsdUJBQVEsRUFBRVEsS0FBTSxXQUFVUixjQUFlLHlCQUFqQyxFQUFSLEVBQXFFLE1BQU1TLFdBQVdGLFNBQVgsRUFBc0IsS0FBdEIsQ0FBM0UsQ0FGRjs7QUFJQUosSUFBSU8sRUFBSixDQUFPLE9BQVAsRUFBZ0IsTUFDZEMsUUFBUUMsR0FBUixDQUFhLGlDQUFnQ1QsSUFBSVUsSUFBSixDQUFTQyxRQUFTLElBQUdYLElBQUlVLElBQUosQ0FBU0UsYUFBYyxFQUF6RixDQURGOztBQUlBWixJQUFJTyxFQUFKLENBQU8sZUFBUCxFQUF3Qk0sT0FDdEJBLElBQUlDLE9BQUosS0FBZ0IsT0FBaEIsR0FDSWQsSUFBSWUsYUFBSixDQUFrQkYsSUFBSUcsT0FBSixDQUFZQyxFQUE5QixFQUFrQyx3Q0FBa0IsTUFBbEIsRUFBMEJILE9BQTVELENBREosR0FFSVosaUJBQWlCZ0IsSUFBakIsQ0FBc0JDLE9BQU9OLElBQUlDLE9BQVgsRUFBb0JNLFdBQXBCLEVBQXRCLElBQ0Usc0JBQWVwQixHQUFmLEVBQW9CYSxHQUFwQixDQURGLEdBRUUsS0FBSyxDQUxiOztBQVFBYixJQUFJcUIsT0FBSjs7QUFFQXBCLFVBQVVxQixHQUFWLENBQWMsR0FBZCxFQUFtQixrQkFBUUMsTUFBUixDQUFlLFFBQWYsQ0FBbkI7QUFDQXRCLFVBQVVxQixHQUFWLENBQWMsZUFBZCxFQUErQixDQUFDRSxDQUFELEVBQUlDLEdBQUosS0FBWUEsSUFBSUMsSUFBSixDQUFVOzs7O0NBQVYsQ0FBM0M7O0FBTUF6QixVQUFVMEIsR0FBVixDQUFjLGdCQUFkLEVBQWdDLENBQUNDLEdBQUQsRUFBTUgsR0FBTixLQUFjQSxJQUFJQyxJQUFKLENBQVUsV0FBVixDQUE5QztBQUNBekIsVUFBVTRCLE1BQVYsQ0FBaUJwQyxJQUFqQixFQUF1QixNQUFNZSxRQUFRQyxHQUFSLENBQWEsbUNBQWtDaEIsSUFBSyxHQUFwRCxLQUEyRFcsV0FBeEY7O0FBRUEwQixPQUFPQyxPQUFQLEdBQWlCLEVBQUUvQixHQUFGLEVBQU9DLFNBQVAsRUFBakIiLCJmaWxlIjoiYm90LmpzIiwic291cmNlUm9vdCI6Ii9hcHAiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgRXJpcyBmcm9tICdlcmlzJ1xuaW1wb3J0IGV4cHJlc3MgZnJvbSAnZXhwcmVzcydcbmltcG9ydCByZXF1ZXN0IGZyb20gJ3JlcXVlc3QnXG5cbmltcG9ydCBicmFpbnNDYWxsYmFjayBmcm9tICcuL2JyYWlucydcbmltcG9ydCB7IGdldFN0YXRpY1Jlc3BvbnNlIH0gZnJvbSAnLi9zdGF0aWNSZXNwb25zZXMnXG5cbmNvbnN0IHsgXG4gIFBPUlQsXG4gIEJPVF9LRVlXT1JELFxuICBESVNDT1JEX0FQSV9UT0tFTixcbiAgRElBTE9HX0ZMT1dfQ0xJRU5UX0FDQ0VTU19LRVksXG4gIFBST0pFQ1RfRE9NQUlOXG59ID0gcHJvY2Vzcy5lbnZcblxuY29uc3QgYm90ID0gbmV3IEVyaXMoRElTQ09SRF9BUElfVE9LRU4pXG5jb25zdCB3ZWJTZXJ2ZXIgPSBleHByZXNzKClcblxuY29uc3QgYm90S2V5d29yZFJlZ2V4cCA9IG5ldyBSZWdFeHAoQk9UX0tFWVdPUkQpXG5cbmNvbnN0IGtlZXBhbGl2ZSA9ICgpID0+XG4gIFBST0pFQ1RfRE9NQUlOICYmXG4gIHJlcXVlc3QoeyB1cmw6IGBodHRwczovLyR7UFJPSkVDVF9ET01BSU59LmdsaXRjaC5tZS9nbGl0Y2gtYWxpdmVgIH0sICgpID0+IHNldFRpbWVvdXQoa2VlcGFsaXZlLCA1NTAwMCkpXG5cbmJvdC5vbihcInJlYWR5XCIsICgpID0+IFxuICBjb25zb2xlLmxvZyhgW0VyaXMgQWRhcHRlcl0gLSBMb2dnZWQgaW4gYXMgJHtib3QudXNlci51c2VybmFtZX0jJHtib3QudXNlci5kaXNjcmltaW5hdG9yfWApXG4pXG5cbmJvdC5vbihcIm1lc3NhZ2VDcmVhdGVcIiwgbXNnID0+IFxuICBtc2cuY29udGVudCA9PT0gXCIhcGluZ1wiXG4gICAgPyBib3QuY3JlYXRlTWVzc2FnZShtc2cuY2hhbm5lbC5pZCwgZ2V0U3RhdGljUmVzcG9uc2UoJ3BpbmcnKS5jb250ZW50KVxuICAgIDogYm90S2V5d29yZFJlZ2V4cC50ZXN0KFN0cmluZyhtc2cuY29udGVudCkudG9Mb3dlckNhc2UoKSlcbiAgICAgID8gYnJhaW5zQ2FsbGJhY2soYm90KShtc2cpXG4gICAgICA6IHZvaWQgMFxuKVxuXG5ib3QuY29ubmVjdCgpXG5cbndlYlNlcnZlci51c2UoJy8nLCBleHByZXNzLnN0YXRpYygncHVibGljJykpXG53ZWJTZXJ2ZXIudXNlKCcvcmVtaXgtYnV0dG9uJywgKF8sIHJlcykgPT4gcmVzLnNlbmQoYFxuPGEgaHJlZj1cImh0dHBzOi8vZ2xpdGNoLmNvbS9lZGl0LyMhL3JlbWl4L2Rpc2NvcmQtZGlhbG9nZmxvdy1ib3RcIj5cbiAgPGltZyBzcmM9XCJodHRwczovL2Nkbi5nbGl0Y2guY29tLzI3MDNiYWYyLWI2NDMtNGRhNy1hYjkxLTdlZTJhMmQwMGI1YiUyRnJlbWl4LWJ1dHRvbi5zdmdcIiBhbHQ9XCJSZW1peCBvbiBHbGl0Y2hcIiAvPlxuPC9hPlxuYCkpXG5cbndlYlNlcnZlci5nZXQoJy9nbGl0Y2gtYWxpdmVgJywgKHJlcSwgcmVzKSA9PiByZXMuc2VuZChgSSdtIGFsaXZlYCkpXG53ZWJTZXJ2ZXIubGlzdGVuKFBPUlQsICgpID0+IGNvbnNvbGUubG9nKGBbV2Vic2VydmVyXSAtIExpc3RlbmluZyBvbiBwb3J0ICR7UE9SVH0hYCkgJiYga2VlcGFsaXZlKCkpXG5cbm1vZHVsZS5leHBvcnRzID0geyBib3QsIHdlYlNlcnZlciB9Il19",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "bot.js"
+      ],
+      "names": [
+        "PORT",
+        "BOT_KEYWORD",
+        "DISCORD_API_TOKEN",
+        "DIALOG_FLOW_CLIENT_ACCESS_KEY",
+        "PROJECT_DOMAIN",
+        "process",
+        "env",
+        "bot",
+        "webServer",
+        "botKeywordRegexp",
+        "RegExp",
+        "keepalive",
+        "url",
+        "setTimeout",
+        "on",
+        "console",
+        "log",
+        "user",
+        "username",
+        "discriminator",
+        "msg",
+        "content",
+        "createMessage",
+        "channel",
+        "id",
+        "test",
+        "String",
+        "toLowerCase",
+        "connect",
+        "use",
+        "static",
+        "_",
+        "res",
+        "send",
+        "get",
+        "req",
+        "listen",
+        "module",
+        "exports"
+      ],
+      "mappings": ";;AAAA;;;;AACA;;;;AACA;;;;AAEA;;;;AACA;;;;AAEA,MAAM;AACJA,MADI;AAEJC,aAFI;AAGJC,mBAHI;AAIJC,+BAJI;AAKJC;AALI,IAMFC,QAAQC,GANZ;;AAQA,MAAMC,MAAM,mBAASL,iBAAT,CAAZ;AACA,MAAMM,YAAY,wBAAlB;;AAEA,MAAMC,mBAAmB,IAAIC,MAAJ,CAAWT,WAAX,CAAzB;;AAEA,MAAMU,YAAY,MAChBP,kBACA,uBAAQ,EAAEQ,KAAM,WAAUR,cAAe,yBAAjC,EAAR,EAAqE,MAAMS,WAAWF,SAAX,EAAsB,KAAtB,CAA3E,CAFF;;AAIAJ,IAAIO,EAAJ,CAAO,OAAP,EAAgB,MACdC,QAAQC,GAAR,CAAa,iCAAgCT,IAAIU,IAAJ,CAASC,QAAS,IAAGX,IAAIU,IAAJ,CAASE,aAAc,EAAzF,CADF;;AAIAZ,IAAIO,EAAJ,CAAO,eAAP,EAAwBM,OACtBA,IAAIC,OAAJ,KAAgB,OAAhB,GACId,IAAIe,aAAJ,CAAkBF,IAAIG,OAAJ,CAAYC,EAA9B,EAAkC,wCAAkB,MAAlB,EAA0BH,OAA5D,CADJ,GAEIZ,iBAAiBgB,IAAjB,CAAsBC,OAAON,IAAIC,OAAX,EAAoBM,WAApB,EAAtB,IACE,sBAAepB,GAAf,EAAoBa,GAApB,CADF,GAEE,KAAK,CALb;;AAQAb,IAAIqB,OAAJ;;AAEApB,UAAUqB,GAAV,CAAc,GAAd,EAAmB,kBAAQC,MAAR,CAAe,QAAf,CAAnB;AACAtB,UAAUqB,GAAV,CAAc,eAAd,EAA+B,CAACE,CAAD,EAAIC,GAAJ,KAAYA,IAAIC,IAAJ,CAAU;;;;CAAV,CAA3C;;AAMAzB,UAAU0B,GAAV,CAAc,gBAAd,EAAgC,CAACC,GAAD,EAAMH,GAAN,KAAcA,IAAIC,IAAJ,CAAU,WAAV,CAA9C;AACAzB,UAAU4B,MAAV,CAAiBpC,IAAjB,EAAuB,MAAMe,QAAQC,GAAR,CAAa,mCAAkChB,IAAK,GAApD,KAA2DW,WAAxF;;AAEA0B,OAAOC,OAAP,GAAiB,EAAE/B,GAAF,EAAOC,SAAP,EAAjB",
+      "file": "bot.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "import Eris from 'eris'\nimport express from 'express'\nimport request from 'request'\n\nimport brainsCallback from './brains'\nimport { getStaticResponse } from './staticResponses'\n\nconst { \n  PORT,\n  BOT_KEYWORD,\n  DISCORD_API_TOKEN,\n  DIALOG_FLOW_CLIENT_ACCESS_KEY,\n  PROJECT_DOMAIN\n} = process.env\n\nconst bot = new Eris(DISCORD_API_TOKEN)\nconst webServer = express()\n\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD)\n\nconst keepalive = () =>\n  PROJECT_DOMAIN &&\n  request({ url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` }, () => setTimeout(keepalive, 55000))\n\nbot.on(\"ready\", () => \n  console.log(`[Eris Adapter] - Logged in as ${bot.user.username}#${bot.user.discriminator}`)\n)\n\nbot.on(\"messageCreate\", msg => \n  msg.content === \"!ping\"\n    ? bot.createMessage(msg.channel.id, getStaticResponse('ping').content)\n    : botKeywordRegexp.test(String(msg.content).toLowerCase())\n      ? brainsCallback(bot)(msg)\n      : void 0\n)\n\nbot.connect()\n\nwebServer.use('/', express.static('public'))\nwebServer.use('/remix-button', (_, res) => res.send(`\n<a href=\"https://glitch.com/edit/#!/remix/discord-dialogflow-bot\">\n  <img src=\"https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg\" alt=\"Remix on Glitch\" />\n</a>\n`))\n\nwebServer.get('/glitch-alive`', (req, res) => res.send(`I'm alive`))\nwebServer.listen(PORT, () => console.log(`[Webserver] - Listening on port ${PORT}!`) && keepalive())\n\nmodule.exports = { bot, webServer }"
+      ]
+    },
+    "mtime": 1522124542824
+  },
+  "{\"filename\":\"/app/brains.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "apiai",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "apiai"
+              }
+            ]
+          },
+          {
+            "source": "./staticResponses",
+            "imported": [
+              "getStaticResponse"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "getStaticResponse",
+                "local": "getStaticResponse"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/brains.js",
+      "filenameRelative": "/app/brains.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "brains.js",
+      "sourceFileName": "brains.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "brains"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _apiai = require('apiai');\n\nvar _apiai2 = _interopRequireDefault(_apiai);\n\nvar _staticResponses = require('./staticResponses');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst { DIALOG_FLOW_CLIENT_ACCESS_KEY } = process.env;\n\nconst nlp = DIALOG_FLOW_CLIENT_ACCESS_KEY !== '' ? (0, _apiai2.default)(DIALOG_FLOW_CLIENT_ACCESS_KEY) : false;\n\nexports.default = nlp ? bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id\n  });\n  request.on('response', response => {\n    console.log(response);\n  });\n  request.on('error', e => bot.createMessage(msg.channel.id, (0, _staticResponses.getStaticResponse)('nlp-error').content) && console.error(e));\n  request.end();\n} : _ => __ => console.log('[NLP] - NLP disabled because a DialogFlow key was not provided');\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJyYWlucy5qcyJdLCJuYW1lcyI6WyJESUFMT0dfRkxPV19DTElFTlRfQUNDRVNTX0tFWSIsInByb2Nlc3MiLCJlbnYiLCJubHAiLCJib3QiLCJtc2ciLCJyZXF1ZXN0IiwidGV4dFJlcXVlc3QiLCJjb250ZW50Iiwic2Vzc2lvbklkIiwiYXV0aG9yIiwiaWQiLCJvbiIsInJlc3BvbnNlIiwiY29uc29sZSIsImxvZyIsImUiLCJjcmVhdGVNZXNzYWdlIiwiY2hhbm5lbCIsImVycm9yIiwiZW5kIiwiXyIsIl9fIl0sIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQTs7OztBQUNBOzs7O0FBRUEsTUFBTSxFQUFFQSw2QkFBRixLQUFvQ0MsUUFBUUMsR0FBbEQ7O0FBRUEsTUFBTUMsTUFBTUgsa0NBQWtDLEVBQWxDLEdBQ1IscUJBQU1BLDZCQUFOLENBRFEsR0FFUixLQUZKOztrQkFJZUcsTUFDWEMsT0FBT0MsT0FBTztBQUNaLFFBQU1DLFVBQVVILElBQUlJLFdBQUosQ0FBZ0JGLElBQUlHLE9BQXBCLEVBQTZCO0FBQzNDQyxlQUFXSixJQUFJSyxNQUFKLENBQVdDO0FBRHFCLEdBQTdCLENBQWhCO0FBR0FMLFVBQVFNLEVBQVIsQ0FBVyxVQUFYLEVBQXVCQyxZQUFZO0FBQ2pDQyxZQUFRQyxHQUFSLENBQVlGLFFBQVo7QUFDRCxHQUZEO0FBR0FQLFVBQVFNLEVBQVIsQ0FBVyxPQUFYLEVBQW9CSSxLQUNsQlosSUFBSWEsYUFBSixDQUNFWixJQUFJYSxPQUFKLENBQVlQLEVBRGQsRUFFRSx3Q0FBa0IsV0FBbEIsRUFBK0JILE9BRmpDLEtBSUdNLFFBQVFLLEtBQVIsQ0FBY0gsQ0FBZCxDQUxMO0FBT0FWLFVBQVFjLEdBQVI7QUFDRCxDQWhCVSxHQWlCWEMsS0FBS0MsTUFBTVIsUUFBUUMsR0FBUixDQUFZLGdFQUFaLEMiLCJmaWxlIjoiYnJhaW5zLmpzIiwic291cmNlUm9vdCI6Ii9hcHAiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXBpYWkgZnJvbSAnYXBpYWknXG5pbXBvcnQgeyBnZXRTdGF0aWNSZXNwb25zZSB9IGZyb20gJy4vc3RhdGljUmVzcG9uc2VzJ1xuXG5jb25zdCB7IERJQUxPR19GTE9XX0NMSUVOVF9BQ0NFU1NfS0VZIH0gPSBwcm9jZXNzLmVudlxuXG5jb25zdCBubHAgPSBESUFMT0dfRkxPV19DTElFTlRfQUNDRVNTX0tFWSAhPT0gJycgXG4gID8gYXBpYWkoRElBTE9HX0ZMT1dfQ0xJRU5UX0FDQ0VTU19LRVkpIFxuICA6IGZhbHNlXG5cbmV4cG9ydCBkZWZhdWx0IG5scCBcbiAgPyBib3QgPT4gbXNnID0+IHtcbiAgICAgIGNvbnN0IHJlcXVlc3QgPSBubHAudGV4dFJlcXVlc3QobXNnLmNvbnRlbnQsIHtcbiAgICAgICAgc2Vzc2lvbklkOiBtc2cuYXV0aG9yLmlkXG4gICAgICB9KVxuICAgICAgcmVxdWVzdC5vbigncmVzcG9uc2UnLCByZXNwb25zZSA9PiB7XG4gICAgICAgIGNvbnNvbGUubG9nKHJlc3BvbnNlKTtcbiAgICAgIH0pXG4gICAgICByZXF1ZXN0Lm9uKCdlcnJvcicsIGUgPT4gXG4gICAgICAgIGJvdC5jcmVhdGVNZXNzYWdlKFxuICAgICAgICAgIG1zZy5jaGFubmVsLmlkLFxuICAgICAgICAgIGdldFN0YXRpY1Jlc3BvbnNlKCdubHAtZXJyb3InKS5jb250ZW50XG4gICAgICAgIClcbiAgICAgICAgJiYgY29uc29sZS5lcnJvcihlKVxuICAgICAgKVxuICAgICAgcmVxdWVzdC5lbmQoKVxuICAgIH1cbiAgOiBfID0+IF9fID0+IGNvbnNvbGUubG9nKCdbTkxQXSAtIE5MUCBkaXNhYmxlZCBiZWNhdXNlIGEgRGlhbG9nRmxvdyBrZXkgd2FzIG5vdCBwcm92aWRlZCcpXG4iXX0=",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "brains.js"
+      ],
+      "names": [
+        "DIALOG_FLOW_CLIENT_ACCESS_KEY",
+        "process",
+        "env",
+        "nlp",
+        "bot",
+        "msg",
+        "request",
+        "textRequest",
+        "content",
+        "sessionId",
+        "author",
+        "id",
+        "on",
+        "response",
+        "console",
+        "log",
+        "e",
+        "createMessage",
+        "channel",
+        "error",
+        "end",
+        "_",
+        "__"
+      ],
+      "mappings": ";;;;;;AAAA;;;;AACA;;;;AAEA,MAAM,EAAEA,6BAAF,KAAoCC,QAAQC,GAAlD;;AAEA,MAAMC,MAAMH,kCAAkC,EAAlC,GACR,qBAAMA,6BAAN,CADQ,GAER,KAFJ;;kBAIeG,MACXC,OAAOC,OAAO;AACZ,QAAMC,UAAUH,IAAII,WAAJ,CAAgBF,IAAIG,OAApB,EAA6B;AAC3CC,eAAWJ,IAAIK,MAAJ,CAAWC;AADqB,GAA7B,CAAhB;AAGAL,UAAQM,EAAR,CAAW,UAAX,EAAuBC,YAAY;AACjCC,YAAQC,GAAR,CAAYF,QAAZ;AACD,GAFD;AAGAP,UAAQM,EAAR,CAAW,OAAX,EAAoBI,KAClBZ,IAAIa,aAAJ,CACEZ,IAAIa,OAAJ,CAAYP,EADd,EAEE,wCAAkB,WAAlB,EAA+BH,OAFjC,KAIGM,QAAQK,KAAR,CAAcH,CAAd,CALL;AAOAV,UAAQc,GAAR;AACD,CAhBU,GAiBXC,KAAKC,MAAMR,QAAQC,GAAR,CAAY,gEAAZ,C",
+      "file": "brains.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "import apiai from 'apiai'\nimport { getStaticResponse } from './staticResponses'\n\nconst { DIALOG_FLOW_CLIENT_ACCESS_KEY } = process.env\n\nconst nlp = DIALOG_FLOW_CLIENT_ACCESS_KEY !== '' \n  ? apiai(DIALOG_FLOW_CLIENT_ACCESS_KEY) \n  : false\n\nexport default nlp \n  ? bot => msg => {\n      const request = nlp.textRequest(msg.content, {\n        sessionId: msg.author.id\n      })\n      request.on('response', response => {\n        console.log(response);\n      })\n      request.on('error', e => \n        bot.createMessage(\n          msg.channel.id,\n          getStaticResponse('nlp-error').content\n        )\n        && console.error(e)\n      )\n      request.end()\n    }\n  : _ => __ => console.log('[NLP] - NLP disabled because a DialogFlow key was not provided')\n"
+      ]
+    },
+    "mtime": 1522124858041
+  },
+  "{\"filename\":\"/app/staticResponses.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [
+            "getStaticResponse"
+          ],
+          "specifiers": [
+            {
+              "kind": "local",
+              "local": "getStaticResponse",
+              "exported": "getStaticResponse"
+            }
+          ]
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/staticResponses.js",
+      "filenameRelative": "/app/staticResponses.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "staticResponses.js",
+      "sourceFileName": "staticResponses.js",
+      "sourceRoot": "/app",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "staticResponses"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nconst responses = {\n\n  ping: { type: 'text', content: 'pong!' },\n\n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  }\n\n};\n\nconst getResponses = () => responses;\n\nconst getStaticResponse = exports.getStaticResponse = response => getResponses()[response];\n\nexports.default = getResponses;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0YXRpY1Jlc3BvbnNlcy5qcyJdLCJuYW1lcyI6WyJyZXNwb25zZXMiLCJwaW5nIiwidHlwZSIsImNvbnRlbnQiLCJnZXRSZXNwb25zZXMiLCJnZXRTdGF0aWNSZXNwb25zZSIsInJlc3BvbnNlIl0sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE1BQU1BLFlBQVk7O0FBRWhCQyxRQUFNLEVBQUVDLE1BQU0sTUFBUixFQUFnQkMsU0FBUyxPQUF6QixFQUZVOztBQUloQixlQUFhO0FBQ1hELFVBQU0sTUFESztBQUVYQyxhQUFTO0FBRkU7O0FBSkcsQ0FBbEI7O0FBV0EsTUFBTUMsZUFBZSxNQUFNSixTQUEzQjs7QUFFTyxNQUFNSyxnREFBb0JDLFlBQVlGLGVBQWVFLFFBQWYsQ0FBdEM7O2tCQUVRRixZIiwiZmlsZSI6InN0YXRpY1Jlc3BvbnNlcy5qcyIsInNvdXJjZVJvb3QiOiIvYXBwIiwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgcmVzcG9uc2VzID0ge1xuICBcbiAgcGluZzogeyB0eXBlOiAndGV4dCcsIGNvbnRlbnQ6ICdwb25nIScgfSxcbiAgXG4gICdubHAtZXJyb3InOiB7XG4gICAgdHlwZTogJ3RleHQnLFxuICAgIGNvbnRlbnQ6ICdPb3BzLCBhbGdvICBubyBlc3RhIGJpZW4gY29uIG1pIHNpc3RlbWEgeSBubyBwdWVkbyBjb250YWN0YXIgY29uIG1pIGNlcmVicm8sIGhhYmxlbW9zIG1hcyB0YXJkZSBwb3IgZmF2b3IgOlMnXG4gIH0sXG4gIFxufVxuXG5jb25zdCBnZXRSZXNwb25zZXMgPSAoKSA9PiByZXNwb25zZXNcblxuZXhwb3J0IGNvbnN0IGdldFN0YXRpY1Jlc3BvbnNlID0gcmVzcG9uc2UgPT4gZ2V0UmVzcG9uc2VzKClbcmVzcG9uc2VdXG5cbmV4cG9ydCBkZWZhdWx0IGdldFJlc3BvbnNlcyJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "staticResponses.js"
+      ],
+      "names": [
+        "responses",
+        "ping",
+        "type",
+        "content",
+        "getResponses",
+        "getStaticResponse",
+        "response"
+      ],
+      "mappings": ";;;;;AAAA,MAAMA,YAAY;;AAEhBC,QAAM,EAAEC,MAAM,MAAR,EAAgBC,SAAS,OAAzB,EAFU;;AAIhB,eAAa;AACXD,UAAM,MADK;AAEXC,aAAS;AAFE;;AAJG,CAAlB;;AAWA,MAAMC,eAAe,MAAMJ,SAA3B;;AAEO,MAAMK,gDAAoBC,YAAYF,eAAeE,QAAf,CAAtC;;kBAEQF,Y",
+      "file": "staticResponses.js",
+      "sourceRoot": "/app",
+      "sourcesContent": [
+        "const responses = {\n  \n  ping: { type: 'text', content: 'pong!' },\n  \n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  },\n  \n}\n\nconst getResponses = () => responses\n\nexport const getStaticResponse = response => getResponses()[response]\n\nexport default getResponses"
+      ]
+    },
+    "mtime": 1522125000940
+  },
+  "{\"filename\":\"/app/bot/index.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "eris",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "Eris"
+              }
+            ]
+          },
+          {
+            "source": "express",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "express"
+              }
+            ]
+          },
+          {
+            "source": "request",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "request"
+              }
+            ]
+          },
+          {
+            "source": "./brain",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "getHandler"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/index.js",
+      "filenameRelative": "/app/bot/index.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "index.js",
+      "sourceFileName": "index.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "index"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nvar _eris = require('eris');\n\nvar _eris2 = _interopRequireDefault(_eris);\n\nvar _express = require('express');\n\nvar _express2 = _interopRequireDefault(_express);\n\nvar _request = require('request');\n\nvar _request2 = _interopRequireDefault(_request);\n\nvar _brain = require('./brain');\n\nvar _brain2 = _interopRequireDefault(_brain);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst { PORT, DISCORD_API_TOKEN, PROJECT_DOMAIN } = process.env;\n\n// Bot\nconst bot = new _eris2.default(DISCORD_API_TOKEN);\nconst handleIncomingMessage = (0, _brain2.default)(bot);\nconst getReadyMessage = bot => `[Eris]-Logged in as ${bot.user.username}#${bot.user.discriminator}`;\n\nbot.on('ready', () => console.info(getReadyMessage(bot)));\nbot.on('messageCreate', handleIncomingMessage);\nbot.connect();\n\n// Web server\nconst webServer = (0, _express2.default)();\nconst keepalive = () => PROJECT_DOMAIN && (0, _request2.default)({ url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` }, () => setTimeout(keepalive, 55000));\n\nwebServer.use('/', _express2.default.static('public'));\n\nif (PROJECT_DOMAIN) webServer.get('/glitch-alive', (req, res) => res.send(`I'm alive`));\n\nwebServer.listen(PORT, () => console.log(`[Express]-Listening on port ${PORT}!`) || keepalive());\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbIlBPUlQiLCJESVNDT1JEX0FQSV9UT0tFTiIsIlBST0pFQ1RfRE9NQUlOIiwicHJvY2VzcyIsImVudiIsImJvdCIsImhhbmRsZUluY29taW5nTWVzc2FnZSIsImdldFJlYWR5TWVzc2FnZSIsInVzZXIiLCJ1c2VybmFtZSIsImRpc2NyaW1pbmF0b3IiLCJvbiIsImNvbnNvbGUiLCJpbmZvIiwiY29ubmVjdCIsIndlYlNlcnZlciIsImtlZXBhbGl2ZSIsInVybCIsInNldFRpbWVvdXQiLCJ1c2UiLCJzdGF0aWMiLCJnZXQiLCJyZXEiLCJyZXMiLCJzZW5kIiwibGlzdGVuIiwibG9nIl0sIm1hcHBpbmdzIjoiOztBQUFBOzs7O0FBQ0E7Ozs7QUFDQTs7OztBQUVBOzs7Ozs7QUFFQSxNQUFNLEVBQUVBLElBQUYsRUFBUUMsaUJBQVIsRUFBMkJDLGNBQTNCLEtBQThDQyxRQUFRQyxHQUE1RDs7QUFFQTtBQUNBLE1BQU1DLE1BQU0sbUJBQVNKLGlCQUFULENBQVo7QUFDQSxNQUFNSyx3QkFBd0IscUJBQVdELEdBQVgsQ0FBOUI7QUFDQSxNQUFNRSxrQkFBa0JGLE9BQ3JCLHVCQUFzQkEsSUFBSUcsSUFBSixDQUFTQyxRQUFTLElBQUdKLElBQUlHLElBQUosQ0FBU0UsYUFBYyxFQURyRTs7QUFHQUwsSUFBSU0sRUFBSixDQUFPLE9BQVAsRUFBZ0IsTUFBTUMsUUFBUUMsSUFBUixDQUFhTixnQkFBZ0JGLEdBQWhCLENBQWIsQ0FBdEI7QUFDQUEsSUFBSU0sRUFBSixDQUFPLGVBQVAsRUFBd0JMLHFCQUF4QjtBQUNBRCxJQUFJUyxPQUFKOztBQUVBO0FBQ0EsTUFBTUMsWUFBWSx3QkFBbEI7QUFDQSxNQUFNQyxZQUFZLE1BQ2hCZCxrQkFDQSx1QkFDRSxFQUFFZSxLQUFNLFdBQVVmLGNBQWUseUJBQWpDLEVBREYsRUFFRSxNQUFNZ0IsV0FBV0YsU0FBWCxFQUFzQixLQUF0QixDQUZSLENBRkY7O0FBT0FELFVBQVVJLEdBQVYsQ0FBYyxHQUFkLEVBQW1CLGtCQUFRQyxNQUFSLENBQWUsUUFBZixDQUFuQjs7QUFFQSxJQUFJbEIsY0FBSixFQUNFYSxVQUFVTSxHQUFWLENBQWMsZUFBZCxFQUErQixDQUFDQyxHQUFELEVBQU1DLEdBQU4sS0FBY0EsSUFBSUMsSUFBSixDQUFVLFdBQVYsQ0FBN0M7O0FBRUZULFVBQVVVLE1BQVYsQ0FDRXpCLElBREYsRUFFRSxNQUFNWSxRQUFRYyxHQUFSLENBQWEsK0JBQThCMUIsSUFBSyxHQUFoRCxLQUF1RGdCLFdBRi9EIiwiZmlsZSI6ImluZGV4LmpzIiwic291cmNlUm9vdCI6Ii9hcHAvYm90Iiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IEVyaXMgZnJvbSAnZXJpcydcbmltcG9ydCBleHByZXNzIGZyb20gJ2V4cHJlc3MnXG5pbXBvcnQgcmVxdWVzdCBmcm9tICdyZXF1ZXN0J1xuXG5pbXBvcnQgZ2V0SGFuZGxlciBmcm9tICcuL2JyYWluJ1xuXG5jb25zdCB7IFBPUlQsIERJU0NPUkRfQVBJX1RPS0VOLCBQUk9KRUNUX0RPTUFJTiB9ID0gcHJvY2Vzcy5lbnZcblxuLy8gQm90XG5jb25zdCBib3QgPSBuZXcgRXJpcyhESVNDT1JEX0FQSV9UT0tFTilcbmNvbnN0IGhhbmRsZUluY29taW5nTWVzc2FnZSA9IGdldEhhbmRsZXIoYm90KVxuY29uc3QgZ2V0UmVhZHlNZXNzYWdlID0gYm90ID0+XG4gIGBbRXJpc10tTG9nZ2VkIGluIGFzICR7Ym90LnVzZXIudXNlcm5hbWV9IyR7Ym90LnVzZXIuZGlzY3JpbWluYXRvcn1gXG5cbmJvdC5vbigncmVhZHknLCAoKSA9PiBjb25zb2xlLmluZm8oZ2V0UmVhZHlNZXNzYWdlKGJvdCkpKVxuYm90Lm9uKCdtZXNzYWdlQ3JlYXRlJywgaGFuZGxlSW5jb21pbmdNZXNzYWdlKVxuYm90LmNvbm5lY3QoKVxuXG4vLyBXZWIgc2VydmVyXG5jb25zdCB3ZWJTZXJ2ZXIgPSBleHByZXNzKClcbmNvbnN0IGtlZXBhbGl2ZSA9ICgpID0+IFxuICBQUk9KRUNUX0RPTUFJTiAmJlxuICByZXF1ZXN0KFxuICAgIHsgdXJsOiBgaHR0cHM6Ly8ke1BST0pFQ1RfRE9NQUlOfS5nbGl0Y2gubWUvZ2xpdGNoLWFsaXZlYCB9LFxuICAgICgpID0+IHNldFRpbWVvdXQoa2VlcGFsaXZlLCA1NTAwMCksXG4gIClcblxud2ViU2VydmVyLnVzZSgnLycsIGV4cHJlc3Muc3RhdGljKCdwdWJsaWMnKSlcblxuaWYgKFBST0pFQ1RfRE9NQUlOKVxuICB3ZWJTZXJ2ZXIuZ2V0KCcvZ2xpdGNoLWFsaXZlJywgKHJlcSwgcmVzKSA9PiByZXMuc2VuZChgSSdtIGFsaXZlYCkpXG5cbndlYlNlcnZlci5saXN0ZW4oXG4gIFBPUlQsXG4gICgpID0+IGNvbnNvbGUubG9nKGBbRXhwcmVzc10tTGlzdGVuaW5nIG9uIHBvcnQgJHtQT1JUfSFgKSB8fCBrZWVwYWxpdmUoKSxcbilcbiJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "index.js"
+      ],
+      "names": [
+        "PORT",
+        "DISCORD_API_TOKEN",
+        "PROJECT_DOMAIN",
+        "process",
+        "env",
+        "bot",
+        "handleIncomingMessage",
+        "getReadyMessage",
+        "user",
+        "username",
+        "discriminator",
+        "on",
+        "console",
+        "info",
+        "connect",
+        "webServer",
+        "keepalive",
+        "url",
+        "setTimeout",
+        "use",
+        "static",
+        "get",
+        "req",
+        "res",
+        "send",
+        "listen",
+        "log"
+      ],
+      "mappings": ";;AAAA;;;;AACA;;;;AACA;;;;AAEA;;;;;;AAEA,MAAM,EAAEA,IAAF,EAAQC,iBAAR,EAA2BC,cAA3B,KAA8CC,QAAQC,GAA5D;;AAEA;AACA,MAAMC,MAAM,mBAASJ,iBAAT,CAAZ;AACA,MAAMK,wBAAwB,qBAAWD,GAAX,CAA9B;AACA,MAAME,kBAAkBF,OACrB,uBAAsBA,IAAIG,IAAJ,CAASC,QAAS,IAAGJ,IAAIG,IAAJ,CAASE,aAAc,EADrE;;AAGAL,IAAIM,EAAJ,CAAO,OAAP,EAAgB,MAAMC,QAAQC,IAAR,CAAaN,gBAAgBF,GAAhB,CAAb,CAAtB;AACAA,IAAIM,EAAJ,CAAO,eAAP,EAAwBL,qBAAxB;AACAD,IAAIS,OAAJ;;AAEA;AACA,MAAMC,YAAY,wBAAlB;AACA,MAAMC,YAAY,MAChBd,kBACA,uBACE,EAAEe,KAAM,WAAUf,cAAe,yBAAjC,EADF,EAEE,MAAMgB,WAAWF,SAAX,EAAsB,KAAtB,CAFR,CAFF;;AAOAD,UAAUI,GAAV,CAAc,GAAd,EAAmB,kBAAQC,MAAR,CAAe,QAAf,CAAnB;;AAEA,IAAIlB,cAAJ,EACEa,UAAUM,GAAV,CAAc,eAAd,EAA+B,CAACC,GAAD,EAAMC,GAAN,KAAcA,IAAIC,IAAJ,CAAU,WAAV,CAA7C;;AAEFT,UAAUU,MAAV,CACEzB,IADF,EAEE,MAAMY,QAAQc,GAAR,CAAa,+BAA8B1B,IAAK,GAAhD,KAAuDgB,WAF/D",
+      "file": "index.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "import Eris from 'eris'\nimport express from 'express'\nimport request from 'request'\n\nimport getHandler from './brain'\n\nconst { PORT, DISCORD_API_TOKEN, PROJECT_DOMAIN } = process.env\n\n// Bot\nconst bot = new Eris(DISCORD_API_TOKEN)\nconst handleIncomingMessage = getHandler(bot)\nconst getReadyMessage = bot =>\n  `[Eris]-Logged in as ${bot.user.username}#${bot.user.discriminator}`\n\nbot.on('ready', () => console.info(getReadyMessage(bot)))\nbot.on('messageCreate', handleIncomingMessage)\nbot.connect()\n\n// Web server\nconst webServer = express()\nconst keepalive = () => \n  PROJECT_DOMAIN &&\n  request(\n    { url: `https://${PROJECT_DOMAIN}.glitch.me/glitch-alive` },\n    () => setTimeout(keepalive, 55000),\n  )\n\nwebServer.use('/', express.static('public'))\n\nif (PROJECT_DOMAIN)\n  webServer.get('/glitch-alive', (req, res) => res.send(`I'm alive`))\n\nwebServer.listen(\n  PORT,\n  () => console.log(`[Express]-Listening on port ${PORT}!`) || keepalive(),\n)\n"
+      ]
+    },
+    "mtime": 1529423880000
+  },
+  "{\"filename\":\"/app/bot/brains.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "apiai",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "apiai"
+              }
+            ]
+          },
+          {
+            "source": "./staticReactions",
+            "imported": [
+              "getStaticReaction"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "getStaticReaction",
+                "local": "getStaticReaction"
+              }
+            ]
+          },
+          {
+            "source": "./conversation",
+            "imported": [
+              "rememberConversation",
+              "onActiveConversation"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "rememberConversation",
+                "local": "rememberConversation"
+              },
+              {
+                "kind": "named",
+                "imported": "onActiveConversation",
+                "local": "onActiveConversation"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/brains.js",
+      "filenameRelative": "/app/bot/brains.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "brains.js",
+      "sourceFileName": "brains.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "brains"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _apiai = require('apiai');\n\nvar _apiai2 = _interopRequireDefault(_apiai);\n\nvar _staticReactions = require('./staticReactions');\n\nvar _conversation = require('./conversation');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst { DIALOGFLOW_CLIENT_ACCESS_KEY, BOT_KEYWORD } = process.env;\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD);\n\nconst nlp = DIALOGFLOW_CLIENT_ACCESS_KEY !== '' ? (0, _apiai2.default)(DIALOGFLOW_CLIENT_ACCESS_KEY) : false;\n\nconst doNlpRequest = bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id\n  });\n  request.on('response', response => {\n    const { result, status } = response;\n    if (parseInt(status.code) !== 200) throw new Error(`Error ${status.errorType || ''} when calling the NLP api`);\n    return result.action && result.fulfillment && Array.isArray(result.fulfillment.messages) && result.fulfillment.messages.forEach(message => message.speech !== '' && bot.createMessage(msg.channel.id, message.speech));\n  });\n  request.on('error', e => bot.createMessage(msg.channel.id, (0, _staticReactions.getStaticReaction)('nlp-error').content) && console.error(e));\n  request.end();\n};\n\nconst nlpAgent = nlp ? doNlpRequest : _ => __ => console.warn('[NLP]-NLP disabled because a DialogFlow key was not provided');\n\nexports.default = bot => msg => msg.content === '!ping' ? bot.createMessage(msg.channel.id, (0, _staticReactions.getStaticReaction)('ping').content) : (0, _conversation.onActiveConversation)(msg) || botKeywordRegexp.test(String(msg.content).toLowerCase()) ? (0, _conversation.rememberConversation)(msg) && nlpAgent(bot)(msg) : void 0;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJyYWlucy5qcyJdLCJuYW1lcyI6WyJESUFMT0dGTE9XX0NMSUVOVF9BQ0NFU1NfS0VZIiwiQk9UX0tFWVdPUkQiLCJwcm9jZXNzIiwiZW52IiwiYm90S2V5d29yZFJlZ2V4cCIsIlJlZ0V4cCIsIm5scCIsImRvTmxwUmVxdWVzdCIsImJvdCIsIm1zZyIsInJlcXVlc3QiLCJ0ZXh0UmVxdWVzdCIsImNvbnRlbnQiLCJzZXNzaW9uSWQiLCJhdXRob3IiLCJpZCIsIm9uIiwicmVzcG9uc2UiLCJyZXN1bHQiLCJzdGF0dXMiLCJwYXJzZUludCIsImNvZGUiLCJFcnJvciIsImVycm9yVHlwZSIsImFjdGlvbiIsImZ1bGZpbGxtZW50IiwiQXJyYXkiLCJpc0FycmF5IiwibWVzc2FnZXMiLCJmb3JFYWNoIiwibWVzc2FnZSIsInNwZWVjaCIsImNyZWF0ZU1lc3NhZ2UiLCJjaGFubmVsIiwiZSIsImNvbnNvbGUiLCJlcnJvciIsImVuZCIsIm5scEFnZW50IiwiXyIsIl9fIiwid2FybiIsInRlc3QiLCJTdHJpbmciLCJ0b0xvd2VyQ2FzZSJdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUE7Ozs7QUFFQTs7QUFDQTs7OztBQUVBLE1BQU0sRUFBRUEsNEJBQUYsRUFBZ0NDLFdBQWhDLEtBQWdEQyxRQUFRQyxHQUE5RDtBQUNBLE1BQU1DLG1CQUFtQixJQUFJQyxNQUFKLENBQVdKLFdBQVgsQ0FBekI7O0FBRUEsTUFBTUssTUFDSk4saUNBQWlDLEVBQWpDLEdBQ0kscUJBQU1BLDRCQUFOLENBREosR0FFSSxLQUhOOztBQUtBLE1BQU1PLGVBQWVDLE9BQU9DLE9BQU87QUFDakMsUUFBTUMsVUFBVUosSUFBSUssV0FBSixDQUFnQkYsSUFBSUcsT0FBcEIsRUFBNkI7QUFDM0NDLGVBQVdKLElBQUlLLE1BQUosQ0FBV0M7QUFEcUIsR0FBN0IsQ0FBaEI7QUFHQUwsVUFBUU0sRUFBUixDQUFXLFVBQVgsRUFBdUJDLFlBQVk7QUFDakMsVUFBTSxFQUFFQyxNQUFGLEVBQVVDLE1BQVYsS0FBcUJGLFFBQTNCO0FBQ0EsUUFBSUcsU0FBU0QsT0FBT0UsSUFBaEIsTUFBMEIsR0FBOUIsRUFDRSxNQUFNLElBQUlDLEtBQUosQ0FDSCxTQUFRSCxPQUFPSSxTQUFQLElBQW9CLEVBQUcsMkJBRDVCLENBQU47QUFHRixXQUNFTCxPQUFPTSxNQUFQLElBQ0NOLE9BQU9PLFdBQVAsSUFBc0JDLE1BQU1DLE9BQU4sQ0FBY1QsT0FBT08sV0FBUCxDQUFtQkcsUUFBakMsQ0FEdkIsSUFFQVYsT0FBT08sV0FBUCxDQUFtQkcsUUFBbkIsQ0FBNEJDLE9BQTVCLENBQ0VDLFdBQ0VBLFFBQVFDLE1BQVIsS0FBbUIsRUFBbkIsSUFDQXZCLElBQUl3QixhQUFKLENBQWtCdkIsSUFBSXdCLE9BQUosQ0FBWWxCLEVBQTlCLEVBQWtDZSxRQUFRQyxNQUExQyxDQUhKLENBSEY7QUFTRCxHQWZEO0FBZ0JBckIsVUFBUU0sRUFBUixDQUNFLE9BREYsRUFFRWtCLEtBQ0UxQixJQUFJd0IsYUFBSixDQUNFdkIsSUFBSXdCLE9BQUosQ0FBWWxCLEVBRGQsRUFFRSx3Q0FBa0IsV0FBbEIsRUFBK0JILE9BRmpDLEtBR0t1QixRQUFRQyxLQUFSLENBQWNGLENBQWQsQ0FOVDtBQVFBeEIsVUFBUTJCLEdBQVI7QUFDRCxDQTdCRDs7QUErQkEsTUFBTUMsV0FBV2hDLE1BQ2JDLFlBRGEsR0FFYmdDLEtBQUtDLE1BQ0hMLFFBQVFNLElBQVIsQ0FDRSw4REFERixDQUhOOztrQkFPZWpDLE9BQU9DLE9BQ3BCQSxJQUFJRyxPQUFKLEtBQWdCLE9BQWhCLEdBQ0lKLElBQUl3QixhQUFKLENBQWtCdkIsSUFBSXdCLE9BQUosQ0FBWWxCLEVBQTlCLEVBQWtDLHdDQUFrQixNQUFsQixFQUEwQkgsT0FBNUQsQ0FESixHQUVJLHdDQUFxQkgsR0FBckIsS0FDQUwsaUJBQWlCc0MsSUFBakIsQ0FBc0JDLE9BQU9sQyxJQUFJRyxPQUFYLEVBQW9CZ0MsV0FBcEIsRUFBdEIsQ0FEQSxHQUVFLHdDQUFxQm5DLEdBQXJCLEtBQTZCNkIsU0FBUzlCLEdBQVQsRUFBY0MsR0FBZCxDQUYvQixHQUdFLEtBQUssQyIsImZpbGUiOiJicmFpbnMuanMiLCJzb3VyY2VSb290IjoiL2FwcC9ib3QiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXBpYWkgZnJvbSAnYXBpYWknXG5cbmltcG9ydCB7IGdldFN0YXRpY1JlYWN0aW9uIH0gZnJvbSAnLi9zdGF0aWNSZWFjdGlvbnMnXG5pbXBvcnQgeyByZW1lbWJlckNvbnZlcnNhdGlvbiwgb25BY3RpdmVDb252ZXJzYXRpb24gfSBmcm9tICcuL2NvbnZlcnNhdGlvbidcblxuY29uc3QgeyBESUFMT0dGTE9XX0NMSUVOVF9BQ0NFU1NfS0VZLCBCT1RfS0VZV09SRCB9ID0gcHJvY2Vzcy5lbnZcbmNvbnN0IGJvdEtleXdvcmRSZWdleHAgPSBuZXcgUmVnRXhwKEJPVF9LRVlXT1JEKVxuXG5jb25zdCBubHAgPVxuICBESUFMT0dGTE9XX0NMSUVOVF9BQ0NFU1NfS0VZICE9PSAnJ1xuICAgID8gYXBpYWkoRElBTE9HRkxPV19DTElFTlRfQUNDRVNTX0tFWSlcbiAgICA6IGZhbHNlXG5cbmNvbnN0IGRvTmxwUmVxdWVzdCA9IGJvdCA9PiBtc2cgPT4ge1xuICBjb25zdCByZXF1ZXN0ID0gbmxwLnRleHRSZXF1ZXN0KG1zZy5jb250ZW50LCB7XG4gICAgc2Vzc2lvbklkOiBtc2cuYXV0aG9yLmlkLFxuICB9KVxuICByZXF1ZXN0Lm9uKCdyZXNwb25zZScsIHJlc3BvbnNlID0+IHtcbiAgICBjb25zdCB7IHJlc3VsdCwgc3RhdHVzIH0gPSByZXNwb25zZVxuICAgIGlmIChwYXJzZUludChzdGF0dXMuY29kZSkgIT09IDIwMClcbiAgICAgIHRocm93IG5ldyBFcnJvcihcbiAgICAgICAgYEVycm9yICR7c3RhdHVzLmVycm9yVHlwZSB8fCAnJ30gd2hlbiBjYWxsaW5nIHRoZSBOTFAgYXBpYCxcbiAgICAgIClcbiAgICByZXR1cm4gKFxuICAgICAgcmVzdWx0LmFjdGlvbiAmJlxuICAgICAgKHJlc3VsdC5mdWxmaWxsbWVudCAmJiBBcnJheS5pc0FycmF5KHJlc3VsdC5mdWxmaWxsbWVudC5tZXNzYWdlcykpICYmXG4gICAgICByZXN1bHQuZnVsZmlsbG1lbnQubWVzc2FnZXMuZm9yRWFjaChcbiAgICAgICAgbWVzc2FnZSA9PlxuICAgICAgICAgIG1lc3NhZ2Uuc3BlZWNoICE9PSAnJyAmJlxuICAgICAgICAgIGJvdC5jcmVhdGVNZXNzYWdlKG1zZy5jaGFubmVsLmlkLCBtZXNzYWdlLnNwZWVjaCksXG4gICAgICApXG4gICAgKVxuICB9KVxuICByZXF1ZXN0Lm9uKFxuICAgICdlcnJvcicsXG4gICAgZSA9PlxuICAgICAgYm90LmNyZWF0ZU1lc3NhZ2UoXG4gICAgICAgIG1zZy5jaGFubmVsLmlkLFxuICAgICAgICBnZXRTdGF0aWNSZWFjdGlvbignbmxwLWVycm9yJykuY29udGVudCxcbiAgICAgICkgJiYgY29uc29sZS5lcnJvcihlKSxcbiAgKVxuICByZXF1ZXN0LmVuZCgpXG59XG5cbmNvbnN0IG5scEFnZW50ID0gbmxwXG4gID8gZG9ObHBSZXF1ZXN0XG4gIDogXyA9PiBfXyA9PlxuICAgICAgY29uc29sZS53YXJuKFxuICAgICAgICAnW05MUF0tTkxQIGRpc2FibGVkIGJlY2F1c2UgYSBEaWFsb2dGbG93IGtleSB3YXMgbm90IHByb3ZpZGVkJyxcbiAgICAgIClcblxuZXhwb3J0IGRlZmF1bHQgYm90ID0+IG1zZyA9PlxuICBtc2cuY29udGVudCA9PT0gJyFwaW5nJ1xuICAgID8gYm90LmNyZWF0ZU1lc3NhZ2UobXNnLmNoYW5uZWwuaWQsIGdldFN0YXRpY1JlYWN0aW9uKCdwaW5nJykuY29udGVudClcbiAgICA6IG9uQWN0aXZlQ29udmVyc2F0aW9uKG1zZykgfHxcbiAgICAgIGJvdEtleXdvcmRSZWdleHAudGVzdChTdHJpbmcobXNnLmNvbnRlbnQpLnRvTG93ZXJDYXNlKCkpXG4gICAgICA/IHJlbWVtYmVyQ29udmVyc2F0aW9uKG1zZykgJiYgbmxwQWdlbnQoYm90KShtc2cpXG4gICAgICA6IHZvaWQgMFxuIl19",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "brains.js"
+      ],
+      "names": [
+        "DIALOGFLOW_CLIENT_ACCESS_KEY",
+        "BOT_KEYWORD",
+        "process",
+        "env",
+        "botKeywordRegexp",
+        "RegExp",
+        "nlp",
+        "doNlpRequest",
+        "bot",
+        "msg",
+        "request",
+        "textRequest",
+        "content",
+        "sessionId",
+        "author",
+        "id",
+        "on",
+        "response",
+        "result",
+        "status",
+        "parseInt",
+        "code",
+        "Error",
+        "errorType",
+        "action",
+        "fulfillment",
+        "Array",
+        "isArray",
+        "messages",
+        "forEach",
+        "message",
+        "speech",
+        "createMessage",
+        "channel",
+        "e",
+        "console",
+        "error",
+        "end",
+        "nlpAgent",
+        "_",
+        "__",
+        "warn",
+        "test",
+        "String",
+        "toLowerCase"
+      ],
+      "mappings": ";;;;;;AAAA;;;;AAEA;;AACA;;;;AAEA,MAAM,EAAEA,4BAAF,EAAgCC,WAAhC,KAAgDC,QAAQC,GAA9D;AACA,MAAMC,mBAAmB,IAAIC,MAAJ,CAAWJ,WAAX,CAAzB;;AAEA,MAAMK,MACJN,iCAAiC,EAAjC,GACI,qBAAMA,4BAAN,CADJ,GAEI,KAHN;;AAKA,MAAMO,eAAeC,OAAOC,OAAO;AACjC,QAAMC,UAAUJ,IAAIK,WAAJ,CAAgBF,IAAIG,OAApB,EAA6B;AAC3CC,eAAWJ,IAAIK,MAAJ,CAAWC;AADqB,GAA7B,CAAhB;AAGAL,UAAQM,EAAR,CAAW,UAAX,EAAuBC,YAAY;AACjC,UAAM,EAAEC,MAAF,EAAUC,MAAV,KAAqBF,QAA3B;AACA,QAAIG,SAASD,OAAOE,IAAhB,MAA0B,GAA9B,EACE,MAAM,IAAIC,KAAJ,CACH,SAAQH,OAAOI,SAAP,IAAoB,EAAG,2BAD5B,CAAN;AAGF,WACEL,OAAOM,MAAP,IACCN,OAAOO,WAAP,IAAsBC,MAAMC,OAAN,CAAcT,OAAOO,WAAP,CAAmBG,QAAjC,CADvB,IAEAV,OAAOO,WAAP,CAAmBG,QAAnB,CAA4BC,OAA5B,CACEC,WACEA,QAAQC,MAAR,KAAmB,EAAnB,IACAvB,IAAIwB,aAAJ,CAAkBvB,IAAIwB,OAAJ,CAAYlB,EAA9B,EAAkCe,QAAQC,MAA1C,CAHJ,CAHF;AASD,GAfD;AAgBArB,UAAQM,EAAR,CACE,OADF,EAEEkB,KACE1B,IAAIwB,aAAJ,CACEvB,IAAIwB,OAAJ,CAAYlB,EADd,EAEE,wCAAkB,WAAlB,EAA+BH,OAFjC,KAGKuB,QAAQC,KAAR,CAAcF,CAAd,CANT;AAQAxB,UAAQ2B,GAAR;AACD,CA7BD;;AA+BA,MAAMC,WAAWhC,MACbC,YADa,GAEbgC,KAAKC,MACHL,QAAQM,IAAR,CACE,8DADF,CAHN;;kBAOejC,OAAOC,OACpBA,IAAIG,OAAJ,KAAgB,OAAhB,GACIJ,IAAIwB,aAAJ,CAAkBvB,IAAIwB,OAAJ,CAAYlB,EAA9B,EAAkC,wCAAkB,MAAlB,EAA0BH,OAA5D,CADJ,GAEI,wCAAqBH,GAArB,KACAL,iBAAiBsC,IAAjB,CAAsBC,OAAOlC,IAAIG,OAAX,EAAoBgC,WAApB,EAAtB,CADA,GAEE,wCAAqBnC,GAArB,KAA6B6B,SAAS9B,GAAT,EAAcC,GAAd,CAF/B,GAGE,KAAK,C",
+      "file": "brains.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "import apiai from 'apiai'\n\nimport { getStaticReaction } from './staticReactions'\nimport { rememberConversation, onActiveConversation } from './conversation'\n\nconst { DIALOGFLOW_CLIENT_ACCESS_KEY, BOT_KEYWORD } = process.env\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD)\n\nconst nlp =\n  DIALOGFLOW_CLIENT_ACCESS_KEY !== ''\n    ? apiai(DIALOGFLOW_CLIENT_ACCESS_KEY)\n    : false\n\nconst doNlpRequest = bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id,\n  })\n  request.on('response', response => {\n    const { result, status } = response\n    if (parseInt(status.code) !== 200)\n      throw new Error(\n        `Error ${status.errorType || ''} when calling the NLP api`,\n      )\n    return (\n      result.action &&\n      (result.fulfillment && Array.isArray(result.fulfillment.messages)) &&\n      result.fulfillment.messages.forEach(\n        message =>\n          message.speech !== '' &&\n          bot.createMessage(msg.channel.id, message.speech),\n      )\n    )\n  })\n  request.on(\n    'error',\n    e =>\n      bot.createMessage(\n        msg.channel.id,\n        getStaticReaction('nlp-error').content,\n      ) && console.error(e),\n  )\n  request.end()\n}\n\nconst nlpAgent = nlp\n  ? doNlpRequest\n  : _ => __ =>\n      console.warn(\n        '[NLP]-NLP disabled because a DialogFlow key was not provided',\n      )\n\nexport default bot => msg =>\n  msg.content === '!ping'\n    ? bot.createMessage(msg.channel.id, getStaticReaction('ping').content)\n    : onActiveConversation(msg) ||\n      botKeywordRegexp.test(String(msg.content).toLowerCase())\n      ? rememberConversation(msg) && nlpAgent(bot)(msg)\n      : void 0\n"
+      ]
+    },
+    "mtime": 1522133573825
+  },
+  "{\"filename\":\"/app/bot/staticResponses.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [
+            "getStaticReaction"
+          ],
+          "specifiers": [
+            {
+              "kind": "local",
+              "local": "getStaticReaction",
+              "exported": "getStaticReaction"
+            }
+          ]
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/staticResponses.js",
+      "filenameRelative": "/app/bot/staticResponses.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "staticResponses.js",
+      "sourceFileName": "staticResponses.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "staticResponses"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nconst reactions = {\n\n  ping: { type: 'text', content: 'pong!' },\n\n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  }\n\n};\n\nconst getReactions = () => reactions;\n\nconst getStaticReaction = exports.getStaticReaction = reaction => getReactions()[reaction];\n\nexports.default = getReactions;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0YXRpY1Jlc3BvbnNlcy5qcyJdLCJuYW1lcyI6WyJyZWFjdGlvbnMiLCJwaW5nIiwidHlwZSIsImNvbnRlbnQiLCJnZXRSZWFjdGlvbnMiLCJnZXRTdGF0aWNSZWFjdGlvbiIsInJlYWN0aW9uIl0sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE1BQU1BLFlBQVk7O0FBRWhCQyxRQUFNLEVBQUVDLE1BQU0sTUFBUixFQUFnQkMsU0FBUyxPQUF6QixFQUZVOztBQUloQixlQUFhO0FBQ1hELFVBQU0sTUFESztBQUVYQyxhQUFTO0FBRkU7O0FBSkcsQ0FBbEI7O0FBV0EsTUFBTUMsZUFBZSxNQUFNSixTQUEzQjs7QUFFTyxNQUFNSyxnREFBb0JDLFlBQVlGLGVBQWVFLFFBQWYsQ0FBdEM7O2tCQUVRRixZIiwiZmlsZSI6InN0YXRpY1Jlc3BvbnNlcy5qcyIsInNvdXJjZVJvb3QiOiIvYXBwL2JvdCIsInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHJlYWN0aW9ucyA9IHtcbiAgXG4gIHBpbmc6IHsgdHlwZTogJ3RleHQnLCBjb250ZW50OiAncG9uZyEnIH0sXG4gIFxuICAnbmxwLWVycm9yJzoge1xuICAgIHR5cGU6ICd0ZXh0JyxcbiAgICBjb250ZW50OiAnT29wcywgYWxnbyAgbm8gZXN0YSBiaWVuIGNvbiBtaSBzaXN0ZW1hIHkgbm8gcHVlZG8gY29udGFjdGFyIGNvbiBtaSBjZXJlYnJvLCBoYWJsZW1vcyBtYXMgdGFyZGUgcG9yIGZhdm9yIDpTJ1xuICB9LFxuICBcbn1cblxuY29uc3QgZ2V0UmVhY3Rpb25zID0gKCkgPT4gcmVhY3Rpb25zXG5cbmV4cG9ydCBjb25zdCBnZXRTdGF0aWNSZWFjdGlvbiA9IHJlYWN0aW9uID0+IGdldFJlYWN0aW9ucygpW3JlYWN0aW9uXVxuXG5leHBvcnQgZGVmYXVsdCBnZXRSZWFjdGlvbnMiXX0=",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "staticResponses.js"
+      ],
+      "names": [
+        "reactions",
+        "ping",
+        "type",
+        "content",
+        "getReactions",
+        "getStaticReaction",
+        "reaction"
+      ],
+      "mappings": ";;;;;AAAA,MAAMA,YAAY;;AAEhBC,QAAM,EAAEC,MAAM,MAAR,EAAgBC,SAAS,OAAzB,EAFU;;AAIhB,eAAa;AACXD,UAAM,MADK;AAEXC,aAAS;AAFE;;AAJG,CAAlB;;AAWA,MAAMC,eAAe,MAAMJ,SAA3B;;AAEO,MAAMK,gDAAoBC,YAAYF,eAAeE,QAAf,CAAtC;;kBAEQF,Y",
+      "file": "staticResponses.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "const reactions = {\n  \n  ping: { type: 'text', content: 'pong!' },\n  \n  'nlp-error': {\n    type: 'text',\n    content: 'Oops, algo  no esta bien con mi sistema y no puedo contactar con mi cerebro, hablemos mas tarde por favor :S'\n  },\n  \n}\n\nconst getReactions = () => reactions\n\nexport const getStaticReaction = reaction => getReactions()[reaction]\n\nexport default getReactions"
+      ]
+    },
+    "mtime": 1522128721968
+  },
+  "{\"filename\":\"/app/bot/conversation.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "node-cache",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "NodeCache"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [
+            "rememberConversation",
+            "onActiveConversation"
+          ],
+          "specifiers": [
+            {
+              "kind": "local",
+              "local": "rememberConversation",
+              "exported": "rememberConversation"
+            },
+            {
+              "kind": "local",
+              "local": "onActiveConversation",
+              "exported": "onActiveConversation"
+            }
+          ]
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/conversation.js",
+      "filenameRelative": "/app/bot/conversation.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "conversation.js",
+      "sourceFileName": "conversation.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "conversation"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.onActiveConversation = exports.rememberConversation = undefined;\n\nvar _nodeCache = require('node-cache');\n\nvar _nodeCache2 = _interopRequireDefault(_nodeCache);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst ttl = 300;\n\nconst conversations = new _nodeCache2.default({ stdTTL: ttl });\n\nconst rememberConversation = exports.rememberConversation = function (msg) {\n  const current = conversations.get(msg.author.id) || {};\n  if (Array.isArray(current.messages)) current.messages.push(msg.content);else current.messages = [msg.content];\n  return conversations.set(msg.author.id, current, ttl);\n};\n\nconst onActiveConversation = exports.onActiveConversation = msg => conversations.get(msg.author.id);\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbnZlcnNhdGlvbi5qcyJdLCJuYW1lcyI6WyJ0dGwiLCJjb252ZXJzYXRpb25zIiwic3RkVFRMIiwicmVtZW1iZXJDb252ZXJzYXRpb24iLCJtc2ciLCJjdXJyZW50IiwiZ2V0IiwiYXV0aG9yIiwiaWQiLCJBcnJheSIsImlzQXJyYXkiLCJtZXNzYWdlcyIsInB1c2giLCJjb250ZW50Iiwic2V0Iiwib25BY3RpdmVDb252ZXJzYXRpb24iXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBQTs7Ozs7O0FBRUEsTUFBTUEsTUFBTSxHQUFaOztBQUVBLE1BQU1DLGdCQUFnQix3QkFBYyxFQUFFQyxRQUFRRixHQUFWLEVBQWQsQ0FBdEI7O0FBRU8sTUFBTUcsc0RBQXVCLFVBQVNDLEdBQVQsRUFBYztBQUNoRCxRQUFNQyxVQUFVSixjQUFjSyxHQUFkLENBQWtCRixJQUFJRyxNQUFKLENBQVdDLEVBQTdCLEtBQW9DLEVBQXBEO0FBQ0EsTUFBSUMsTUFBTUMsT0FBTixDQUFjTCxRQUFRTSxRQUF0QixDQUFKLEVBQXFDTixRQUFRTSxRQUFSLENBQWlCQyxJQUFqQixDQUFzQlIsSUFBSVMsT0FBMUIsRUFBckMsS0FDS1IsUUFBUU0sUUFBUixHQUFtQixDQUFDUCxJQUFJUyxPQUFMLENBQW5CO0FBQ0wsU0FBT1osY0FBY2EsR0FBZCxDQUFrQlYsSUFBSUcsTUFBSixDQUFXQyxFQUE3QixFQUFpQ0gsT0FBakMsRUFBMENMLEdBQTFDLENBQVA7QUFDRCxDQUxNOztBQU9BLE1BQU1lLHNEQUF1QlgsT0FBT0gsY0FBY0ssR0FBZCxDQUFrQkYsSUFBSUcsTUFBSixDQUFXQyxFQUE3QixDQUFwQyIsImZpbGUiOiJjb252ZXJzYXRpb24uanMiLCJzb3VyY2VSb290IjoiL2FwcC9ib3QiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTm9kZUNhY2hlIGZyb20gJ25vZGUtY2FjaGUnXG5cbmNvbnN0IHR0bCA9IDMwMFxuXG5jb25zdCBjb252ZXJzYXRpb25zID0gbmV3IE5vZGVDYWNoZSh7IHN0ZFRUTDogdHRsIH0pXG5cbmV4cG9ydCBjb25zdCByZW1lbWJlckNvbnZlcnNhdGlvbiA9IGZ1bmN0aW9uKG1zZykge1xuICBjb25zdCBjdXJyZW50ID0gY29udmVyc2F0aW9ucy5nZXQobXNnLmF1dGhvci5pZCkgfHwge31cbiAgaWYgKEFycmF5LmlzQXJyYXkoY3VycmVudC5tZXNzYWdlcykpIGN1cnJlbnQubWVzc2FnZXMucHVzaChtc2cuY29udGVudClcbiAgZWxzZSBjdXJyZW50Lm1lc3NhZ2VzID0gW21zZy5jb250ZW50XVxuICByZXR1cm4gY29udmVyc2F0aW9ucy5zZXQobXNnLmF1dGhvci5pZCwgY3VycmVudCwgdHRsKVxufVxuXG5leHBvcnQgY29uc3Qgb25BY3RpdmVDb252ZXJzYXRpb24gPSBtc2cgPT4gY29udmVyc2F0aW9ucy5nZXQobXNnLmF1dGhvci5pZClcbiJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "conversation.js"
+      ],
+      "names": [
+        "ttl",
+        "conversations",
+        "stdTTL",
+        "rememberConversation",
+        "msg",
+        "current",
+        "get",
+        "author",
+        "id",
+        "Array",
+        "isArray",
+        "messages",
+        "push",
+        "content",
+        "set",
+        "onActiveConversation"
+      ],
+      "mappings": ";;;;;;;AAAA;;;;;;AAEA,MAAMA,MAAM,GAAZ;;AAEA,MAAMC,gBAAgB,wBAAc,EAAEC,QAAQF,GAAV,EAAd,CAAtB;;AAEO,MAAMG,sDAAuB,UAASC,GAAT,EAAc;AAChD,QAAMC,UAAUJ,cAAcK,GAAd,CAAkBF,IAAIG,MAAJ,CAAWC,EAA7B,KAAoC,EAApD;AACA,MAAIC,MAAMC,OAAN,CAAcL,QAAQM,QAAtB,CAAJ,EAAqCN,QAAQM,QAAR,CAAiBC,IAAjB,CAAsBR,IAAIS,OAA1B,EAArC,KACKR,QAAQM,QAAR,GAAmB,CAACP,IAAIS,OAAL,CAAnB;AACL,SAAOZ,cAAca,GAAd,CAAkBV,IAAIG,MAAJ,CAAWC,EAA7B,EAAiCH,OAAjC,EAA0CL,GAA1C,CAAP;AACD,CALM;;AAOA,MAAMe,sDAAuBX,OAAOH,cAAcK,GAAd,CAAkBF,IAAIG,MAAJ,CAAWC,EAA7B,CAApC",
+      "file": "conversation.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "import NodeCache from 'node-cache'\n\nconst ttl = 300\n\nconst conversations = new NodeCache({ stdTTL: ttl })\n\nexport const rememberConversation = function(msg) {\n  const current = conversations.get(msg.author.id) || {}\n  if (Array.isArray(current.messages)) current.messages.push(msg.content)\n  else current.messages = [msg.content]\n  return conversations.set(msg.author.id, current, ttl)\n}\n\nexport const onActiveConversation = msg => conversations.get(msg.author.id)\n"
+      ]
+    },
+    "mtime": 1529423880000
+  },
+  "{\"filename\":\"/app/bot/staticReactions.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [],
+      "marked": [],
+      "modules": {
+        "imports": [],
+        "exports": {
+          "exported": [
+            "getStaticReaction"
+          ],
+          "specifiers": [
+            {
+              "kind": "local",
+              "local": "getStaticReaction",
+              "exported": "getStaticReaction"
+            }
+          ]
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/staticReactions.js",
+      "filenameRelative": "/app/bot/staticReactions.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "staticReactions.js",
+      "sourceFileName": "staticReactions.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "staticReactions"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nconst reactions = {\n\n  ping: { type: 'text', content: 'Bang!' },\n  hello: { type: 'text', content: 'Whatcha doing there goofball?' },\n\n  'nlp-error': {\n    type: 'text',\n    content: 'Oops'\n  }\n\n};\n\nconst getReactions = () => reactions;\n\nconst getStaticReaction = exports.getStaticReaction = reaction => getReactions()[reaction];\n\nexports.default = getReactions;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0YXRpY1JlYWN0aW9ucy5qcyJdLCJuYW1lcyI6WyJyZWFjdGlvbnMiLCJwaW5nIiwidHlwZSIsImNvbnRlbnQiLCJoZWxsbyIsImdldFJlYWN0aW9ucyIsImdldFN0YXRpY1JlYWN0aW9uIiwicmVhY3Rpb24iXSwibWFwcGluZ3MiOiI7Ozs7O0FBQUEsTUFBTUEsWUFBWTs7QUFFaEJDLFFBQU0sRUFBRUMsTUFBTSxNQUFSLEVBQWdCQyxTQUFTLE9BQXpCLEVBRlU7QUFHaEJDLFNBQU8sRUFBRUYsTUFBTSxNQUFSLEVBQWdCQyxTQUFTLCtCQUF6QixFQUhTOztBQUtoQixlQUFhO0FBQ1hELFVBQU0sTUFESztBQUVYQyxhQUFTO0FBRkU7O0FBTEcsQ0FBbEI7O0FBWUEsTUFBTUUsZUFBZSxNQUFNTCxTQUEzQjs7QUFFTyxNQUFNTSxnREFBb0JDLFlBQVlGLGVBQWVFLFFBQWYsQ0FBdEM7O2tCQUVRRixZIiwiZmlsZSI6InN0YXRpY1JlYWN0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiIvYXBwL2JvdCIsInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHJlYWN0aW9ucyA9IHtcbiAgXG4gIHBpbmc6IHsgdHlwZTogJ3RleHQnLCBjb250ZW50OiAnQmFuZyEnIH0sXG4gIGhlbGxvOiB7IHR5cGU6ICd0ZXh0JywgY29udGVudDogJ1doYXRjaGEgZG9pbmcgdGhlcmUgZ29vZmJhbGw/JyB9LFxuICBcbiAgJ25scC1lcnJvcic6IHtcbiAgICB0eXBlOiAndGV4dCcsXG4gICAgY29udGVudDogJ09vcHMnXG4gIH0sXG4gIFxufVxuXG5jb25zdCBnZXRSZWFjdGlvbnMgPSAoKSA9PiByZWFjdGlvbnNcblxuZXhwb3J0IGNvbnN0IGdldFN0YXRpY1JlYWN0aW9uID0gcmVhY3Rpb24gPT4gZ2V0UmVhY3Rpb25zKClbcmVhY3Rpb25dXG5cbmV4cG9ydCBkZWZhdWx0IGdldFJlYWN0aW9ucyJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "staticReactions.js"
+      ],
+      "names": [
+        "reactions",
+        "ping",
+        "type",
+        "content",
+        "hello",
+        "getReactions",
+        "getStaticReaction",
+        "reaction"
+      ],
+      "mappings": ";;;;;AAAA,MAAMA,YAAY;;AAEhBC,QAAM,EAAEC,MAAM,MAAR,EAAgBC,SAAS,OAAzB,EAFU;AAGhBC,SAAO,EAAEF,MAAM,MAAR,EAAgBC,SAAS,+BAAzB,EAHS;;AAKhB,eAAa;AACXD,UAAM,MADK;AAEXC,aAAS;AAFE;;AALG,CAAlB;;AAYA,MAAME,eAAe,MAAML,SAA3B;;AAEO,MAAMM,gDAAoBC,YAAYF,eAAeE,QAAf,CAAtC;;kBAEQF,Y",
+      "file": "staticReactions.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "const reactions = {\n  \n  ping: { type: 'text', content: 'Bang!' },\n  hello: { type: 'text', content: 'Whatcha doing there goofball?' },\n  \n  'nlp-error': {\n    type: 'text',\n    content: 'Oops'\n  },\n  \n}\n\nconst getReactions = () => reactions\n\nexport const getStaticReaction = reaction => getReactions()[reaction]\n\nexport default getReactions"
+      ]
+    },
+    "mtime": 1556025293000
+  },
+  "{\"filename\":\"/app/bot/brain.js\",\"env\":{},\"retainLines\":false,\"highlightCode\":true,\"suppressDeprecationMessages\":false,\"presets\":[],\"plugins\":[[[],{\"loose\":false}]],\"ignore\":[],\"code\":true,\"metadata\":true,\"ast\":true,\"comments\":true,\"compact\":\"auto\",\"minified\":false,\"sourceRoot\":\"/app/bot\",\"babelrc\":true,\"sourceType\":\"module\",\"moduleIds\":false,\"passPerPreset\":false,\"parserOpts\":false,\"generatorOpts\":false}:6.26.0": {
+    "metadata": {
+      "usedHelpers": [
+        "interopRequireDefault"
+      ],
+      "marked": [],
+      "modules": {
+        "imports": [
+          {
+            "source": "apiai",
+            "imported": [
+              "default"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "default",
+                "local": "apiai"
+              }
+            ]
+          },
+          {
+            "source": "./staticReactions",
+            "imported": [
+              "getStaticReaction"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "getStaticReaction",
+                "local": "getStaticReaction"
+              }
+            ]
+          },
+          {
+            "source": "./conversation",
+            "imported": [
+              "rememberConversation",
+              "onActiveConversation"
+            ],
+            "specifiers": [
+              {
+                "kind": "named",
+                "imported": "rememberConversation",
+                "local": "rememberConversation"
+              },
+              {
+                "kind": "named",
+                "imported": "onActiveConversation",
+                "local": "onActiveConversation"
+              }
+            ]
+          }
+        ],
+        "exports": {
+          "exported": [],
+          "specifiers": []
+        }
+      }
+    },
+    "options": {
+      "filename": "/app/bot/brain.js",
+      "filenameRelative": "/app/bot/brain.js",
+      "env": {},
+      "retainLines": false,
+      "highlightCode": true,
+      "suppressDeprecationMessages": false,
+      "presets": [],
+      "plugins": [
+        [
+          [],
+          {
+            "loose": false
+          }
+        ]
+      ],
+      "ignore": [],
+      "code": true,
+      "metadata": true,
+      "ast": false,
+      "comments": true,
+      "compact": "auto",
+      "minified": false,
+      "sourceMaps": "both",
+      "sourceMapTarget": "brain.js",
+      "sourceFileName": "brain.js",
+      "sourceRoot": "/app/bot",
+      "babelrc": false,
+      "sourceType": "module",
+      "moduleRoot": "/app/bot",
+      "moduleIds": false,
+      "passPerPreset": false,
+      "parserOpts": false,
+      "generatorOpts": false,
+      "basename": "brain"
+    },
+    "ignored": false,
+    "code": "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _apiai = require('apiai');\n\nvar _apiai2 = _interopRequireDefault(_apiai);\n\nvar _staticReactions = require('./staticReactions');\n\nvar _conversation = require('./conversation');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst { DIALOGFLOW_CLIENT_ACCESS_KEY, BOT_KEYWORD } = process.env;\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD);\n\nconst nlp = DIALOGFLOW_CLIENT_ACCESS_KEY !== '' ? (0, _apiai2.default)(DIALOGFLOW_CLIENT_ACCESS_KEY) : false;\n\nconst doNlpRequest = bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id\n  });\n  request.on('response', response => {\n    const { result, status } = response;\n    if (parseInt(status.code) !== 200) throw new Error(`Error ${status.errorType || ''} when calling the NLP api`);\n    return result.action && result.fulfillment && Array.isArray(result.fulfillment.messages) && result.fulfillment.messages.forEach(message => message.speech !== '' && bot.createMessage(msg.channel.id, message.speech));\n  });\n  request.on('error', e => bot.createMessage(msg.channel.id, (0, _staticReactions.getStaticReaction)('nlp-error').content) && console.error(e));\n  request.end();\n};\n\nconst nlpAgent = nlp ? doNlpRequest : _ => __ => // ugly shit\nconsole.warn('[NLP]-NLP disabled because a DialogFlow key was not provided');\n\nexports.default = bot => msg => msg.content === '!ping' ? bot.createMessage(msg.channel.id, (0, _staticReactions.getStaticReaction)('ping').content) : (0, _conversation.onActiveConversation)(msg) || botKeywordRegexp.test(String(msg.content).toLowerCase()) ? (0, _conversation.rememberConversation)(msg) && nlpAgent(bot)(msg) : void 0;\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJyYWluLmpzIl0sIm5hbWVzIjpbIkRJQUxPR0ZMT1dfQ0xJRU5UX0FDQ0VTU19LRVkiLCJCT1RfS0VZV09SRCIsInByb2Nlc3MiLCJlbnYiLCJib3RLZXl3b3JkUmVnZXhwIiwiUmVnRXhwIiwibmxwIiwiZG9ObHBSZXF1ZXN0IiwiYm90IiwibXNnIiwicmVxdWVzdCIsInRleHRSZXF1ZXN0IiwiY29udGVudCIsInNlc3Npb25JZCIsImF1dGhvciIsImlkIiwib24iLCJyZXNwb25zZSIsInJlc3VsdCIsInN0YXR1cyIsInBhcnNlSW50IiwiY29kZSIsIkVycm9yIiwiZXJyb3JUeXBlIiwiYWN0aW9uIiwiZnVsZmlsbG1lbnQiLCJBcnJheSIsImlzQXJyYXkiLCJtZXNzYWdlcyIsImZvckVhY2giLCJtZXNzYWdlIiwic3BlZWNoIiwiY3JlYXRlTWVzc2FnZSIsImNoYW5uZWwiLCJlIiwiY29uc29sZSIsImVycm9yIiwiZW5kIiwibmxwQWdlbnQiLCJfIiwiX18iLCJ3YXJuIiwidGVzdCIsIlN0cmluZyIsInRvTG93ZXJDYXNlIl0sIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQTs7OztBQUVBOztBQUNBOzs7O0FBRUEsTUFBTSxFQUFFQSw0QkFBRixFQUFnQ0MsV0FBaEMsS0FBZ0RDLFFBQVFDLEdBQTlEO0FBQ0EsTUFBTUMsbUJBQW1CLElBQUlDLE1BQUosQ0FBV0osV0FBWCxDQUF6Qjs7QUFFQSxNQUFNSyxNQUNKTixpQ0FBaUMsRUFBakMsR0FDSSxxQkFBTUEsNEJBQU4sQ0FESixHQUVJLEtBSE47O0FBS0EsTUFBTU8sZUFBZUMsT0FBT0MsT0FBTztBQUNqQyxRQUFNQyxVQUFVSixJQUFJSyxXQUFKLENBQWdCRixJQUFJRyxPQUFwQixFQUE2QjtBQUMzQ0MsZUFBV0osSUFBSUssTUFBSixDQUFXQztBQURxQixHQUE3QixDQUFoQjtBQUdBTCxVQUFRTSxFQUFSLENBQVcsVUFBWCxFQUF1QkMsWUFBWTtBQUNqQyxVQUFNLEVBQUVDLE1BQUYsRUFBVUMsTUFBVixLQUFxQkYsUUFBM0I7QUFDQSxRQUFJRyxTQUFTRCxPQUFPRSxJQUFoQixNQUEwQixHQUE5QixFQUNFLE1BQU0sSUFBSUMsS0FBSixDQUNILFNBQVFILE9BQU9JLFNBQVAsSUFBb0IsRUFBRywyQkFENUIsQ0FBTjtBQUdGLFdBQ0VMLE9BQU9NLE1BQVAsSUFDQ04sT0FBT08sV0FBUCxJQUFzQkMsTUFBTUMsT0FBTixDQUFjVCxPQUFPTyxXQUFQLENBQW1CRyxRQUFqQyxDQUR2QixJQUVBVixPQUFPTyxXQUFQLENBQW1CRyxRQUFuQixDQUE0QkMsT0FBNUIsQ0FDRUMsV0FDRUEsUUFBUUMsTUFBUixLQUFtQixFQUFuQixJQUNBdkIsSUFBSXdCLGFBQUosQ0FBa0J2QixJQUFJd0IsT0FBSixDQUFZbEIsRUFBOUIsRUFBa0NlLFFBQVFDLE1BQTFDLENBSEosQ0FIRjtBQVNELEdBZkQ7QUFnQkFyQixVQUFRTSxFQUFSLENBQ0UsT0FERixFQUVFa0IsS0FDRTFCLElBQUl3QixhQUFKLENBQ0V2QixJQUFJd0IsT0FBSixDQUFZbEIsRUFEZCxFQUVFLHdDQUFrQixXQUFsQixFQUErQkgsT0FGakMsS0FHS3VCLFFBQVFDLEtBQVIsQ0FBY0YsQ0FBZCxDQU5UO0FBUUF4QixVQUFRMkIsR0FBUjtBQUNELENBN0JEOztBQStCQSxNQUFNQyxXQUFXaEMsTUFDYkMsWUFEYSxHQUViZ0MsS0FBS0MsTUFBTTtBQUNUTCxRQUFRTSxJQUFSLENBQ0UsOERBREYsQ0FITjs7a0JBT2VqQyxPQUFPQyxPQUNwQkEsSUFBSUcsT0FBSixLQUFnQixPQUFoQixHQUNJSixJQUFJd0IsYUFBSixDQUFrQnZCLElBQUl3QixPQUFKLENBQVlsQixFQUE5QixFQUFrQyx3Q0FBa0IsTUFBbEIsRUFBMEJILE9BQTVELENBREosR0FFSSx3Q0FBcUJILEdBQXJCLEtBQ0FMLGlCQUFpQnNDLElBQWpCLENBQXNCQyxPQUFPbEMsSUFBSUcsT0FBWCxFQUFvQmdDLFdBQXBCLEVBQXRCLENBREEsR0FFRSx3Q0FBcUJuQyxHQUFyQixLQUE2QjZCLFNBQVM5QixHQUFULEVBQWNDLEdBQWQsQ0FGL0IsR0FHRSxLQUFLLEMiLCJmaWxlIjoiYnJhaW4uanMiLCJzb3VyY2VSb290IjoiL2FwcC9ib3QiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXBpYWkgZnJvbSAnYXBpYWknXG5cbmltcG9ydCB7IGdldFN0YXRpY1JlYWN0aW9uIH0gZnJvbSAnLi9zdGF0aWNSZWFjdGlvbnMnXG5pbXBvcnQgeyByZW1lbWJlckNvbnZlcnNhdGlvbiwgb25BY3RpdmVDb252ZXJzYXRpb24gfSBmcm9tICcuL2NvbnZlcnNhdGlvbidcblxuY29uc3QgeyBESUFMT0dGTE9XX0NMSUVOVF9BQ0NFU1NfS0VZLCBCT1RfS0VZV09SRCB9ID0gcHJvY2Vzcy5lbnZcbmNvbnN0IGJvdEtleXdvcmRSZWdleHAgPSBuZXcgUmVnRXhwKEJPVF9LRVlXT1JEKVxuXG5jb25zdCBubHAgPVxuICBESUFMT0dGTE9XX0NMSUVOVF9BQ0NFU1NfS0VZICE9PSAnJ1xuICAgID8gYXBpYWkoRElBTE9HRkxPV19DTElFTlRfQUNDRVNTX0tFWSlcbiAgICA6IGZhbHNlXG5cbmNvbnN0IGRvTmxwUmVxdWVzdCA9IGJvdCA9PiBtc2cgPT4ge1xuICBjb25zdCByZXF1ZXN0ID0gbmxwLnRleHRSZXF1ZXN0KG1zZy5jb250ZW50LCB7XG4gICAgc2Vzc2lvbklkOiBtc2cuYXV0aG9yLmlkLFxuICB9KVxuICByZXF1ZXN0Lm9uKCdyZXNwb25zZScsIHJlc3BvbnNlID0+IHtcbiAgICBjb25zdCB7IHJlc3VsdCwgc3RhdHVzIH0gPSByZXNwb25zZVxuICAgIGlmIChwYXJzZUludChzdGF0dXMuY29kZSkgIT09IDIwMClcbiAgICAgIHRocm93IG5ldyBFcnJvcihcbiAgICAgICAgYEVycm9yICR7c3RhdHVzLmVycm9yVHlwZSB8fCAnJ30gd2hlbiBjYWxsaW5nIHRoZSBOTFAgYXBpYCxcbiAgICAgIClcbiAgICByZXR1cm4gKFxuICAgICAgcmVzdWx0LmFjdGlvbiAmJlxuICAgICAgKHJlc3VsdC5mdWxmaWxsbWVudCAmJiBBcnJheS5pc0FycmF5KHJlc3VsdC5mdWxmaWxsbWVudC5tZXNzYWdlcykpICYmXG4gICAgICByZXN1bHQuZnVsZmlsbG1lbnQubWVzc2FnZXMuZm9yRWFjaChcbiAgICAgICAgbWVzc2FnZSA9PlxuICAgICAgICAgIG1lc3NhZ2Uuc3BlZWNoICE9PSAnJyAmJlxuICAgICAgICAgIGJvdC5jcmVhdGVNZXNzYWdlKG1zZy5jaGFubmVsLmlkLCBtZXNzYWdlLnNwZWVjaCksXG4gICAgICApXG4gICAgKVxuICB9KVxuICByZXF1ZXN0Lm9uKFxuICAgICdlcnJvcicsXG4gICAgZSA9PlxuICAgICAgYm90LmNyZWF0ZU1lc3NhZ2UoXG4gICAgICAgIG1zZy5jaGFubmVsLmlkLFxuICAgICAgICBnZXRTdGF0aWNSZWFjdGlvbignbmxwLWVycm9yJykuY29udGVudCxcbiAgICAgICkgJiYgY29uc29sZS5lcnJvcihlKSxcbiAgKVxuICByZXF1ZXN0LmVuZCgpXG59XG5cbmNvbnN0IG5scEFnZW50ID0gbmxwXG4gID8gZG9ObHBSZXF1ZXN0XG4gIDogXyA9PiBfXyA9PiAvLyB1Z2x5IHNoaXRcbiAgICAgIGNvbnNvbGUud2FybihcbiAgICAgICAgJ1tOTFBdLU5MUCBkaXNhYmxlZCBiZWNhdXNlIGEgRGlhbG9nRmxvdyBrZXkgd2FzIG5vdCBwcm92aWRlZCcsXG4gICAgICApXG5cbmV4cG9ydCBkZWZhdWx0IGJvdCA9PiBtc2cgPT5cbiAgbXNnLmNvbnRlbnQgPT09ICchcGluZydcbiAgICA/IGJvdC5jcmVhdGVNZXNzYWdlKG1zZy5jaGFubmVsLmlkLCBnZXRTdGF0aWNSZWFjdGlvbigncGluZycpLmNvbnRlbnQpXG4gICAgOiBvbkFjdGl2ZUNvbnZlcnNhdGlvbihtc2cpIHx8XG4gICAgICBib3RLZXl3b3JkUmVnZXhwLnRlc3QoU3RyaW5nKG1zZy5jb250ZW50KS50b0xvd2VyQ2FzZSgpKVxuICAgICAgPyByZW1lbWJlckNvbnZlcnNhdGlvbihtc2cpICYmIG5scEFnZW50KGJvdCkobXNnKVxuICAgICAgOiB2b2lkIDBcbiJdfQ==",
+    "ast": null,
+    "map": {
+      "version": 3,
+      "sources": [
+        "brain.js"
+      ],
+      "names": [
+        "DIALOGFLOW_CLIENT_ACCESS_KEY",
+        "BOT_KEYWORD",
+        "process",
+        "env",
+        "botKeywordRegexp",
+        "RegExp",
+        "nlp",
+        "doNlpRequest",
+        "bot",
+        "msg",
+        "request",
+        "textRequest",
+        "content",
+        "sessionId",
+        "author",
+        "id",
+        "on",
+        "response",
+        "result",
+        "status",
+        "parseInt",
+        "code",
+        "Error",
+        "errorType",
+        "action",
+        "fulfillment",
+        "Array",
+        "isArray",
+        "messages",
+        "forEach",
+        "message",
+        "speech",
+        "createMessage",
+        "channel",
+        "e",
+        "console",
+        "error",
+        "end",
+        "nlpAgent",
+        "_",
+        "__",
+        "warn",
+        "test",
+        "String",
+        "toLowerCase"
+      ],
+      "mappings": ";;;;;;AAAA;;;;AAEA;;AACA;;;;AAEA,MAAM,EAAEA,4BAAF,EAAgCC,WAAhC,KAAgDC,QAAQC,GAA9D;AACA,MAAMC,mBAAmB,IAAIC,MAAJ,CAAWJ,WAAX,CAAzB;;AAEA,MAAMK,MACJN,iCAAiC,EAAjC,GACI,qBAAMA,4BAAN,CADJ,GAEI,KAHN;;AAKA,MAAMO,eAAeC,OAAOC,OAAO;AACjC,QAAMC,UAAUJ,IAAIK,WAAJ,CAAgBF,IAAIG,OAApB,EAA6B;AAC3CC,eAAWJ,IAAIK,MAAJ,CAAWC;AADqB,GAA7B,CAAhB;AAGAL,UAAQM,EAAR,CAAW,UAAX,EAAuBC,YAAY;AACjC,UAAM,EAAEC,MAAF,EAAUC,MAAV,KAAqBF,QAA3B;AACA,QAAIG,SAASD,OAAOE,IAAhB,MAA0B,GAA9B,EACE,MAAM,IAAIC,KAAJ,CACH,SAAQH,OAAOI,SAAP,IAAoB,EAAG,2BAD5B,CAAN;AAGF,WACEL,OAAOM,MAAP,IACCN,OAAOO,WAAP,IAAsBC,MAAMC,OAAN,CAAcT,OAAOO,WAAP,CAAmBG,QAAjC,CADvB,IAEAV,OAAOO,WAAP,CAAmBG,QAAnB,CAA4BC,OAA5B,CACEC,WACEA,QAAQC,MAAR,KAAmB,EAAnB,IACAvB,IAAIwB,aAAJ,CAAkBvB,IAAIwB,OAAJ,CAAYlB,EAA9B,EAAkCe,QAAQC,MAA1C,CAHJ,CAHF;AASD,GAfD;AAgBArB,UAAQM,EAAR,CACE,OADF,EAEEkB,KACE1B,IAAIwB,aAAJ,CACEvB,IAAIwB,OAAJ,CAAYlB,EADd,EAEE,wCAAkB,WAAlB,EAA+BH,OAFjC,KAGKuB,QAAQC,KAAR,CAAcF,CAAd,CANT;AAQAxB,UAAQ2B,GAAR;AACD,CA7BD;;AA+BA,MAAMC,WAAWhC,MACbC,YADa,GAEbgC,KAAKC,MAAM;AACTL,QAAQM,IAAR,CACE,8DADF,CAHN;;kBAOejC,OAAOC,OACpBA,IAAIG,OAAJ,KAAgB,OAAhB,GACIJ,IAAIwB,aAAJ,CAAkBvB,IAAIwB,OAAJ,CAAYlB,EAA9B,EAAkC,wCAAkB,MAAlB,EAA0BH,OAA5D,CADJ,GAEI,wCAAqBH,GAArB,KACAL,iBAAiBsC,IAAjB,CAAsBC,OAAOlC,IAAIG,OAAX,EAAoBgC,WAApB,EAAtB,CADA,GAEE,wCAAqBnC,GAArB,KAA6B6B,SAAS9B,GAAT,EAAcC,GAAd,CAF/B,GAGE,KAAK,C",
+      "file": "brain.js",
+      "sourceRoot": "/app/bot",
+      "sourcesContent": [
+        "import apiai from 'apiai'\n\nimport { getStaticReaction } from './staticReactions'\nimport { rememberConversation, onActiveConversation } from './conversation'\n\nconst { DIALOGFLOW_CLIENT_ACCESS_KEY, BOT_KEYWORD } = process.env\nconst botKeywordRegexp = new RegExp(BOT_KEYWORD)\n\nconst nlp =\n  DIALOGFLOW_CLIENT_ACCESS_KEY !== ''\n    ? apiai(DIALOGFLOW_CLIENT_ACCESS_KEY)\n    : false\n\nconst doNlpRequest = bot => msg => {\n  const request = nlp.textRequest(msg.content, {\n    sessionId: msg.author.id,\n  })\n  request.on('response', response => {\n    const { result, status } = response\n    if (parseInt(status.code) !== 200)\n      throw new Error(\n        `Error ${status.errorType || ''} when calling the NLP api`,\n      )\n    return (\n      result.action &&\n      (result.fulfillment && Array.isArray(result.fulfillment.messages)) &&\n      result.fulfillment.messages.forEach(\n        message =>\n          message.speech !== '' &&\n          bot.createMessage(msg.channel.id, message.speech),\n      )\n    )\n  })\n  request.on(\n    'error',\n    e =>\n      bot.createMessage(\n        msg.channel.id,\n        getStaticReaction('nlp-error').content,\n      ) && console.error(e),\n  )\n  request.end()\n}\n\nconst nlpAgent = nlp\n  ? doNlpRequest\n  : _ => __ => // ugly shit\n      console.warn(\n        '[NLP]-NLP disabled because a DialogFlow key was not provided',\n      )\n\nexport default bot => msg =>\n  msg.content === '!ping'\n    ? bot.createMessage(msg.channel.id, getStaticReaction('ping').content)\n    : onActiveConversation(msg) ||\n      botKeywordRegexp.test(String(msg.content).toLowerCase())\n      ? rememberConversation(msg) && nlpAgent(bot)(msg)\n      : void 0\n"
+      ]
+    },
+    "mtime": 1529423880000
+  }
+}
